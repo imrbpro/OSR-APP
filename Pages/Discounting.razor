@@ -1,0 +1,81 @@
+﻿@page "/discounting"
+
+<style>
+    th {
+        background-color: green !important;
+        color: white !important;
+    }
+</style>
+<h1>Discounting Report by Portfolio</h1>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Br code</th>
+            <th scope="col">Branch Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Customer Rame</th>
+            <th scope="col">Cover Rate</th>
+            <th scope="col">Cu</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Equi P</th>
+            <th scope="col">Revenue</th>
+            <th scope="col">Spread</th>
+            <th scope="col">Dealer ID</th>
+            <th scope="col">Comact Person</th>
+            <th scope="col">Segement</th>
+            <th scope="col">Deal Notes</th>
+            <th scope="col">Can Curr</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in financialData)
+        {
+            <tr>
+                <td>@item.BrCode</td>
+                <td>@item.BranchName</td>
+                <td>@item.Type</td>
+                <td>@item.CustomerName</td>
+                <td>@item.CoverRate</td>
+                <td>@item.Cu</td>
+                <td>@item.Amount</td>
+                <td>@item.EquiP</td>
+                <td>@item.Revenue</td>
+                <td>@item.Spread</td>
+                <td>@item.DealerID</td>
+                <td>@item.ComactPerson</td>
+                <td>@item.Segement</td>
+                <td>@item.DealNotes</td>
+                <td>@item.CanCurr</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    public List<FinancialData> financialData { get; set; } = new List<FinancialData>();
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    public class FinancialData
+    {
+        public string BrCode { get; set; }
+        public string BranchName { get; set; }
+        public string Type { get; set; }
+        public string CustomerName { get; set; }
+        public decimal CoverRate { get; set; }
+        public string Cu { get; set; }
+        public decimal Amount { get; set; }
+        public string EquiP { get; set; }
+        public decimal Revenue { get; set; }
+        public decimal Spread { get; set; }
+        public string DealerID { get; set; }
+        public string ComactPerson { get; set; }
+        public string Segement { get; set; }
+        public string DealNotes { get; set; }
+        public string CanCurr { get; set; }
+    }
+
+}
