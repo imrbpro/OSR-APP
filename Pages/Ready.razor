@@ -1,76 +1,97 @@
 ﻿@page "/ready"
+@using MudBlazor
+@using OSR_APP.Services.Interface
+@using Newtonsoft.Json;
+@inject IReadyService readyService
+<div class="col-sm-12">
+    <MudTable Items="@readyData" Dense="true" Hover="true" FixedHeader="true" Filter="new Func<Models.Ready,bool>(FilterReady)">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Ready Data</MudText>
+            <MudSpacer />
+            <MudTextField T="string" Placeholder="Search" Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Deal No</MudTh>
+            <MudTh>Deal Date</MudTh>
+            <MudTh>Branch Code</MudTh>
+            <MudTh>Branch Name</MudTh>
+            <MudTh>PS</MudTh>
+            <MudTh>SN</MudTh>
+            <MudTh>Cover Rate</MudTh>
+            <MudTh>Cust Rate</MudTh>
+            <MudTh>CCY</MudTh>
+            <MudTh>Amount</MudTh>
+            <MudTh>Equivalent PKR</MudTh>
+            <MudTh>Revenue</MudTh>
+            <MudTh>Spread</MudTh>
+            <MudTh>Dealer</MudTh>
+            <MudTh>Contact Person</MudTh>
+            <MudTh>Segment</MudTh>
+            <MudTh>CTRCCY</MudTh>
+            <MudTh>Deal Notes</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.DealNo</MudTd>
+            <MudTd>@context.DealDate.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd>@context.BrCode</MudTd>
+            <MudTd>@context.BrName</MudTd>
+            <MudTd>@context.PS</MudTd>
+            <MudTd>@context.SN</MudTd>
+            <MudTd>@context.CoverRate</MudTd>
+            <MudTd>@context.CustRate</MudTd>
+            <MudTd>@context.CCY</MudTd>
+            <MudTd>@context.Amount</MudTd>
+            <MudTd>@context.EquivalentPKR</MudTd>
+            <MudTd>@context.Revenue</MudTd>
+            <MudTd>@context.Spread</MudTd>
+            <MudTd>@context.Dealer</MudTd>
+            <MudTd>@context.ContactPerson</MudTd>
+            <MudTd>@context.Segment</MudTd>
+            <MudTd>@context.CTRCCY</MudTd>
+            <MudTd>@context.DealNotes</MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No matching records found</MudText>
+        </NoRecordsContent>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
 
-<PageTitle>Ready</PageTitle>
-<style>
-    th{
-        background-color:green !important;
-        color:white !important;
-    }
-</style>
-<h1>Ready</h1>
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Br code</th>
-            <th scope="col">Branch Name</th>
-            <th scope="col">Type</th>
-            <th scope="col">Customer Rame</th>
-            <th scope="col">Cover Rate</th>
-            <th scope="col">Cu</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Equi P</th>
-            <th scope="col">Revenue</th>
-            <th scope="col">Spread</th>
-            <th scope="col">Dealer ID</th>
-            <th scope="col">Comact Person</th>
-            <th scope="col">Segement</th>
-            <th scope="col">Deal Notes</th>
-            <th scope="col">Can Curr</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in data)
-        {
-            <tr>
-                <td>@item.BrCode</td>
-                <td>@item.BranchName</td>
-                <td>@item.Type</td>
-                <td>@item.CustomerName</td>
-                <td>@item.CoverRate</td>
-                <td>@item.Cu</td>
-                <td>@item.Amount</td>
-                <td>@item.EquiP</td>
-                <td>@item.Revenue</td>
-                <td>@item.Spread</td>
-                <td>@item.DealerID</td>
-                <td>@item.ComactPerson</td>
-                <td>@item.Segement</td>
-                <td>@item.DealNotes</td>
-                <td>@item.CanCurr</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</div>
 @code {
-    public List<DataItem> data { get; set; } = new List<DataItem>();
+    private IEnumerable<OSR_APP.Models.Ready> readyData;
+    Dictionary<string, string> dictionary = new Dictionary<string, string>();
+    private string searchString = "";
 
-    public class DataItem
+    protected override async Task OnInitializedAsync()
     {
-        public string BrCode { get; set; }
-        public string BranchName { get; set; }
-        public string Type { get; set; }
-        public string CustomerName { get; set; }
-        public decimal CoverRate { get; set; }
-        public string Cu { get; set; }
-        public decimal Amount { get; set; }
-        public string EquiP { get; set; }
-        public decimal Revenue { get; set; }
-        public decimal Spread { get; set; }
-        public string DealerID { get; set; }
-        public string ComactPerson { get; set; }
-        public string Segement { get; set; }
-        public string DealNotes { get; set; }
-        public string CanCurr { get; set; }
+        var response = await readyService.GetReadyData();
+        readyData = response["readyData"];
+    }
+    private void OnSearch(string text)
+    {
+        readyData = readyData.Where(r =>
+          r.DealNo.ToString().Contains(text) ||
+          r.BrCode.Contains(text, StringComparison.OrdinalIgnoreCase) ||
+          r.BrName.Contains(text, StringComparison.OrdinalIgnoreCase)
+        );
+    }
+
+    private bool FilterReady(Models.Ready element) => FilterFunc(element, searchString);
+
+    private bool FilterFunc(Models.Ready ready, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (ready.DealNo.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (ready.BrName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
     }
 }

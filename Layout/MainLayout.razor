@@ -9,23 +9,23 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudMainContent>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <img src="./icon.png" width="40" height="40" style="margin: 0 auto;" />
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
         </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+        <main>
+            <div class="top-row px-4">
+                <img src="./icon.png" width="40" height="40" style="margin: 0 auto;" />
+            </div>
 
-    </MudMainContent>
+            <article class="content px-4">
+                <MudMainContent>
+                    @Body
+                </MudMainContent>
+            </article>
+        </main>
+    </div>
+
 </MudLayout>

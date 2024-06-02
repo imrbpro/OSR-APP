@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
 using MudBlazor.Services;
+using OSR_APP.Services.Implementation;
+using OSR_APP.Services.Interface;
 
 namespace OSR_APP
 {
@@ -13,6 +16,7 @@ namespace OSR_APP
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddTransient<IReadyService, ReadyService>();
 
             builder.Services.AddMudServices();
             await builder.Build().RunAsync();
