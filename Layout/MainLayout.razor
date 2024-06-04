@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
 <style>
     .top-row {
         background: #017165 !important;
@@ -11,14 +13,20 @@
 <MudLayout>
 
     <div class="page">
-        <div class="sidebar">
-            <NavMenu />
-        </div>
-
-        <main>
-            <div class="top-row px-4">
-                <img src="./icon.png" width="40" height="40" style="margin: 0 auto;" />
+        @if (IsAuthenticated)
+        {
+            <div class="sidebar">
+                <NavMenu />
             </div>
+        }
+        <main>
+            @if (IsAuthenticated)
+            {
+                <div class="top-row px-4">
+                    <img src="./icon.png" width="40" height="40" style="margin: 0 auto;" />
+                </div>
+            }
+            
 
             <article class="content px-4">
                 <MudMainContent>
@@ -29,3 +37,20 @@
     </div>
 
 </MudLayout>
+@code{
+    private bool IsAuthenticated = false;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var status = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "Authenticated");
+        if (!string.IsNullOrEmpty(status) && status == "true")
+        {
+            IsAuthenticated = true;
+        }
+        else
+        {
+            IsAuthenticated = false;
+            NavigationManager.NavigateTo("/login");
+        }
+    }
+}
