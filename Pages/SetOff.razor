@@ -1,0 +1,127 @@
+﻿@page "/Setoff"
+@using MudBlazor
+@using OSR_APP.Services.Interface
+@using Newtonsoft.Json;
+@inject ISetofffwService setoffService
+
+<div class="col-sm-12 table-container-styled">
+    <style>
+        .mud-table-cell-custom-group {
+            font-weight: 500;
+        }
+
+        .mud-table-cell-custom-group-footer {
+            padding-bottom: 50px;
+            text-align: right;
+        }
+
+        .table-container-styled {
+            table-layout: fixed;
+            display: table;
+        }
+
+        .table-styled {
+            text-wrap: nowrap !important;
+            word-break: break-word;
+        }
+    </style>
+
+    <MudTable Class="table-styled" Hover="true" Breakpoint="Breakpoint.Sm" FixedHeader="true"
+              Items="@setoffData"
+              GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
+              GroupFooterClass="mb-4"
+              Dense="true">
+        <HeaderContent>
+            <MudTh>DealNumber</MudTh>
+            <MudTh>TakeDownDate</MudTh>
+            <MudTh>BrCode</MudTh>
+            <MudTh>Curr</MudTh>
+            <MudTh>Type</MudTh>
+            <MudTh>Port</MudTh>
+            <MudTh>TakeDownAmount</MudTh>
+            <MudTh>CustomerRate</MudTh>
+            <MudTh>EquivalentPKR</MudTh>
+            <MudTh>MaturityDate</MudTh>
+            <MudTh>DealDate</MudTh>
+            <MudTh>OptionDate</MudTh>
+            <MudTh>Customer</MudTh>
+            <MudTh>TotalBookedDays</MudTh>
+            <MudTh>TotalOptionDays</MudTh>
+            <MudTh>TotalUtilizeUntilizedDays</MudTh>
+            <MudTh>PremiumUtilizedProfit</MudTh>
+            <MudTh>TotalPremium</MudTh>
+            <MudTh>Profit</MudTh>
+            <MudTh>RemainDays</MudTh>
+            <MudTh>PremiumLoss</MudTh>
+            <MudTh>Loss</MudTh>
+            <MudTh>WeightedAvgDaysUtilized</MudTh>
+            <MudTh>WeightedAvgDaysUnutilized</MudTh>
+            <MudTh>Remarks</MudTh>
+            <MudTh>USDEq</MudTh>
+            <MudTh>CTRCCY</MudTh>
+            <MudTh>DealersID</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.DealNumber</MudTd>
+            <MudTd>@context.TakeDownDate.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd>@context.BrCode</MudTd>
+            <MudTd>@context.Curr</MudTd>
+            <MudTd>@context.Type</MudTd>
+            <MudTd>@context.Port</MudTd>
+            <MudTd>@context.TakeDownAmount</MudTd>
+            <MudTd>@context.CustomerRate</MudTd>
+            <MudTd>@context.EquivalentPKR</MudTd>
+            <MudTd>@context.MaturityDate.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd>@context.DealDate.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd>@context.OptionDate.ToString("dd/MM/yyyy")</MudTd>
+            <MudTd>@context.Customer</MudTd>
+            <MudTd>@context.TotalBookedDays</MudTd>
+            <MudTd>@context.TotalOptionDays</MudTd>
+            <MudTd>@context.TotalUtilizeUntilizedDays</MudTd>
+            <MudTd>@context.PremiumUtilizedProfit</MudTd>
+            <MudTd>@context.TotalPremium</MudTd>
+            <MudTd>@context.Profit</MudTd>
+            <MudTd>@context.RemainDays</MudTd>
+            <MudTd>@context.PremiumLoss</MudTd>
+            <MudTd>@context.Loss</MudTd>
+            <MudTd>@context.WeightedAvgDaysUtilized</MudTd>
+            <MudTd>@context.WeightedAvgDaysUnutilized</MudTd>
+            <MudTd>@context.Remarks</MudTd>
+            <MudTd>@context.USDEq</MudTd>
+            <MudTd>@context.CTRCCY</MudTd>
+            <MudTd>@context.DealersID</MudTd>
+        </RowTemplate>
+    </MudTable>
+</div>
+@code {
+    private IEnumerable<OSR_APP.Models.SetOfffw> setoffData;
+    Dictionary<string, string> dictionary = new Dictionary<string, string>();
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await setoffService.GetSetOffData();
+        setoffData = response["setoffData"];
+    }
+    private void OnSearch(string text)
+    {
+        setoffData = setoffData.Where(r =>
+          r.DealNumber.ToString().Contains(text) ||
+          r.DealersID.Contains(text, StringComparison.OrdinalIgnoreCase) ||
+          r.BrCode.Contains(text, StringComparison.OrdinalIgnoreCase)
+        );
+    }
+
+    private bool FilterReady(Models.SetOfffw element) => FilterFunc(element, searchString);
+
+    private bool FilterFunc(Models.SetOfffw setOfffw, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (setOfffw.DealNumber.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (setOfffw.BrCode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}
