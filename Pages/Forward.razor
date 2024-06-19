@@ -12,7 +12,7 @@
 
         .mud-table-cell-custom-group-footer {
             padding-bottom: 50px;
-            text-align: right;
+            text-align: left;
         }
 
         .table-container-styled {
@@ -26,11 +26,11 @@
         }
     </style>
 
-    <MudTable Class="table-styled" Hover="true" Breakpoint="Breakpoint.Sm" FixedHeader="true"
+    <MudTable Class="table-styled" Hover="true" Breakpoint="Breakpoint.Sm"
               Items="@forwardData"
               GroupBy="@_groupDefinition"
               GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
-              GroupFooterClass="mb-4"
+              GroupFooterClass=""
               Dense="true">
         <ColGroup>
             <col />
@@ -121,8 +121,11 @@
             <MudTd>@context.EqPakRs</MudTd>
             <MudTd>@context.exprofit</MudTd>
         </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }" />
+        </PagerContent>
         <GroupFooterTemplate>
-            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="27">Total: @context.Items.Sum((e) => Convert.ToInt32(e.AMOUNT))</MudTh>
+            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="27">TOTAL( Ex-Profit: @context.Items.Sum((e) => Convert.ToDecimal(e.exprofit)) | Amount: @context.Items.Sum((e) => Convert.ToDecimal(e.AMOUNT)) | Equivalent Pakistani Rupees: @context.Items.Sum((e) => Convert.ToDecimal(e.EQPKR)) )</MudTh>
         </GroupFooterTemplate>
     </MudTable>
 </div>

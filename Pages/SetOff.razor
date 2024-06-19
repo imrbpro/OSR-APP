@@ -12,7 +12,7 @@
 
         .mud-table-cell-custom-group-footer {
             padding-bottom: 50px;
-            text-align: right;
+            text-align: left;
         }
 
         .table-container-styled {
@@ -91,6 +91,10 @@
             <MudTd>@context.CTRCCY</MudTd>
             <MudTd>@context.DealersID</MudTd>
         </RowTemplate>
+
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }" />
+        </PagerContent>
     </MudTable>
 </div>
 @code {
