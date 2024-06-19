@@ -11,7 +11,7 @@
 
         .mud-table-cell-custom-group-footer {
             padding-bottom: 50px;
-            text-align: right;
+            text-align: left;
         }
 
         .table-container-styled {
@@ -29,7 +29,7 @@
               Items="@discountingData"
               GroupBy="@_groupDefinition"
               GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
-              GroupFooterClass="mb-4"
+              GroupFooterClass=""
               Dense="true">
         <ColGroup>
             <col />
@@ -124,8 +124,11 @@
             <MudTd>@context.ExProfit</MudTd>
             <MudTd>@context.Spread</MudTd>
         </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }" />
+        </PagerContent>
         <GroupFooterTemplate>
-            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="28">Total: @context.Items.Sum((e) => Convert.ToInt32(e.Amount))</MudTh>
+            <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer">TOTAL(Ex-Profit: @context.Items.Sum((e) => Convert.ToDecimal(e.ExProfit)) | Amount: @context.Items.Sum((e) => Convert.ToDecimal(e.Amount)) | Equvivalent PKR: @context.Items.Sum((e) => Convert.ToDecimal(e.EquivalentPKR)) | Equivalent USD: @context.Items.Sum((e) => Convert.ToDecimal(e.EquivalentUSD)) | Spread: @context.Items.Sum((e)=> Convert.ToDecimal(e.Spread)) )</MudTh>
         </GroupFooterTemplate>
     </MudTable>
 </div>
