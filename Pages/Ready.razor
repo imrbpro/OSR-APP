@@ -24,6 +24,7 @@
             word-break: break-word;
         }
     </style>
+    <h3>Ready Data</h3>
     <MudTable Class="table-styled" Hover="true" Breakpoint="Breakpoint.Sm" 
               Items="@readyData"
               GroupBy="@_groupDefinition"
@@ -116,7 +117,8 @@
         {
             GroupName = "Segment",
             Indentation = false,
-            Expandable = false,
+            Expandable = true,
+            IsInitiallyExpanded = true,
             Selector = (e) => e.Segment
         };
     private void OnSearch(string text)

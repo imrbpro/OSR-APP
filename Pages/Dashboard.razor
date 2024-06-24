@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+@inject NavigationManager navigation
 <PageTitle>Dashboard</PageTitle>
 
 <h1>Reporting Filters</h1>
@@ -128,7 +128,7 @@
     </div>
 </div>
 
-<button class="btn btn-primary">Generate Report</button
+<button class="btn btn-primary" @onclick="GenerateReport">Generate Report</button>
 
 @code {
     bool dealNumber;
@@ -140,4 +140,9 @@
     DateTime valueDateTo = DateTime.Now;
     bool branchCode, currency, portfolio, trader, customer, ps;
     string groupBy;
+
+    private void GenerateReport()
+    {
+        navigation.NavigateTo("/ready");
+    }
 }
