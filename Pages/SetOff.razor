@@ -25,91 +25,90 @@
             word-break: break-word;
         }
     </style>
-     <h3>SetOff</h3>
-    <hr />
-    @if (IsLoading)
-    {
-        <center>
-            <div class="loader"></div>
-        </center>
-    }
-    else
-    {
-        <MudTable Class
-        ="table-styled" Hover
-        ="true" Breakpoint
-        ="Breakpoint.Sm" FixedHeader
-        ="true"
-        Items="@setoffData"
-              GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
-              GroupFooterClass="mb-4"
-              Dense="true">
-        <HeaderContent>
-            <MudTh>DealNumber</MudTh>
-            <MudTh>TakeDownDate</MudTh>
-            <MudTh>BrCode</MudTh>
-            <MudTh>Curr</MudTh>
-            <MudTh>Type</MudTh>
-            <MudTh>Port</MudTh>
-            <MudTh>TakeDownAmount</MudTh>
-            <MudTh>CustomerRate</MudTh>
-            <MudTh>EquivalentPKR</MudTh>
-            <MudTh>MaturityDate</MudTh>
-            <MudTh>DealDate</MudTh>
-            <MudTh>OptionDate</MudTh>
-            <MudTh>Customer</MudTh>
-            <MudTh>TotalBookedDays</MudTh>
-            <MudTh>TotalOptionDays</MudTh>
-            <MudTh>TotalUtilizeUntilizedDays</MudTh>
-            <MudTh>PremiumUtilizedProfit</MudTh>
-            <MudTh>TotalPremium</MudTh>
-            <MudTh>Profit</MudTh>
-            <MudTh>RemainDays</MudTh>
-            <MudTh>PremiumLoss</MudTh>
-            <MudTh>Loss</MudTh>
-            <MudTh>WeightedAvgDaysUtilized</MudTh>
-            <MudTh>WeightedAvgDaysUnutilized</MudTh>
-            <MudTh>Remarks</MudTh>
-            <MudTh>USDEq</MudTh>
-            <MudTh>CTRCCY</MudTh>
-            <MudTh>DealersID</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd>@context.DealNumber</MudTd>
-            <MudTd>@context.TakeDownDate.ToString("dd/MM/yyyy")</MudTd>
-            <MudTd>@context.BrCode</MudTd>
-            <MudTd>@context.Curr</MudTd>
-            <MudTd>@context.Type</MudTd>
-            <MudTd>@context.Port</MudTd>
-            <MudTd>@context.TakeDownAmount</MudTd>
-            <MudTd>@context.CustomerRate</MudTd>
-            <MudTd>@context.EquivalentPKR</MudTd>
-            <MudTd>@context.MaturityDate.ToString("dd/MM/yyyy")</MudTd>
-            <MudTd>@context.DealDate.ToString("dd/MM/yyyy")</MudTd>
-            <MudTd>@context.OptionDate.ToString("dd/MM/yyyy")</MudTd>
-            <MudTd>@context.Customer</MudTd>
-            <MudTd>@context.TotalBookedDays</MudTd>
-            <MudTd>@context.TotalOptionDays</MudTd>
-            <MudTd>@context.TotalUtilizeUntilizedDays</MudTd>
-            <MudTd>@context.PremiumUtilizedProfit</MudTd>
-            <MudTd>@context.TotalPremium</MudTd>
-            <MudTd>@context.Profit</MudTd>
-            <MudTd>@context.RemainDays</MudTd>
-            <MudTd>@context.PremiumLoss</MudTd>
-            <MudTd>@context.Loss</MudTd>
-            <MudTd>@context.WeightedAvgDaysUtilized</MudTd>
-            <MudTd>@context.WeightedAvgDaysUnutilized</MudTd>
-            <MudTd>@context.Remarks</MudTd>
-            <MudTd>@context.USDEq</MudTd>
-            <MudTd>@context.CTRCCY</MudTd>
-            <MudTd>@context.DealersID</MudTd>
-        </RowTemplate>
 
-        <PagerContent>
-            <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }" />
-        </PagerContent>
-    </MudTable>
-    }
+    <div class="align-content-sm-around p-4">
+        <h3>SetOff</h3>
+        <hr />
+        @if (IsLoading)
+        {
+            <center>
+                <div class="loader"></div>
+            </center>
+        }
+        else
+        {
+            <MudTable Class="table-styled" Hover="true" Breakpoint="Breakpoint.Sm" FixedHeader="true"
+                      Items="@setoffData"
+                      GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
+                      GroupFooterClass="mb-4"
+                      Dense="true">
+                <HeaderContent>
+                    <MudTh>DealNumber</MudTh>
+                    <MudTh>TakeDownDate</MudTh>
+                    <MudTh>BrCode</MudTh>
+                    <MudTh>Curr</MudTh>
+                    <MudTh>Type</MudTh>
+                    <MudTh>Port</MudTh>
+                    <MudTh>TakeDownAmount</MudTh>
+                    <MudTh>CustomerRate</MudTh>
+                    <MudTh>EquivalentPKR</MudTh>
+                    <MudTh>MaturityDate</MudTh>
+                    <MudTh>DealDate</MudTh>
+                    <MudTh>OptionDate</MudTh>
+                    <MudTh>Customer</MudTh>
+                    <MudTh>TotalBookedDays</MudTh>
+                    <MudTh>TotalOptionDays</MudTh>
+                    <MudTh>TotalUtilizeUntilizedDays</MudTh>
+                    <MudTh>PremiumUtilizedProfit</MudTh>
+                    <MudTh>TotalPremium</MudTh>
+                    <MudTh>Profit</MudTh>
+                    <MudTh>RemainDays</MudTh>
+                    <MudTh>PremiumLoss</MudTh>
+                    <MudTh>Loss</MudTh>
+                    <MudTh>WeightedAvgDaysUtilized</MudTh>
+                    <MudTh>WeightedAvgDaysUnutilized</MudTh>
+                    <MudTh>Remarks</MudTh>
+                    <MudTh>USDEq</MudTh>
+                    <MudTh>CTRCCY</MudTh>
+                    <MudTh>DealersID</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.DealNumber</MudTd>
+                    <MudTd>@context.TakeDownDate.ToString("dd/MM/yyyy")</MudTd>
+                    <MudTd>@context.BrCode</MudTd>
+                    <MudTd>@context.Curr</MudTd>
+                    <MudTd>@context.Type</MudTd>
+                    <MudTd>@context.Port</MudTd>
+                    <MudTd>@context.TakeDownAmount</MudTd>
+                    <MudTd>@context.CustomerRate</MudTd>
+                    <MudTd>@context.EquivalentPKR</MudTd>
+                    <MudTd>@context.MaturityDate.ToString("dd/MM/yyyy")</MudTd>
+                    <MudTd>@context.DealDate.ToString("dd/MM/yyyy")</MudTd>
+                    <MudTd>@context.OptionDate.ToString("dd/MM/yyyy")</MudTd>
+                    <MudTd>@context.Customer</MudTd>
+                    <MudTd>@context.TotalBookedDays</MudTd>
+                    <MudTd>@context.TotalOptionDays</MudTd>
+                    <MudTd>@context.TotalUtilizeUntilizedDays</MudTd>
+                    <MudTd>@context.PremiumUtilizedProfit</MudTd>
+                    <MudTd>@context.TotalPremium</MudTd>
+                    <MudTd>@context.Profit</MudTd>
+                    <MudTd>@context.RemainDays</MudTd>
+                    <MudTd>@context.PremiumLoss</MudTd>
+                    <MudTd>@context.Loss</MudTd>
+                    <MudTd>@context.WeightedAvgDaysUtilized</MudTd>
+                    <MudTd>@context.WeightedAvgDaysUnutilized</MudTd>
+                    <MudTd>@context.Remarks</MudTd>
+                    <MudTd>@context.USDEq</MudTd>
+                    <MudTd>@context.CTRCCY</MudTd>
+                    <MudTd>@context.DealersID</MudTd>
+                </RowTemplate>
+
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }" />
+                </PagerContent>
+            </MudTable>
+        }
+    </div>
 </div>
 @code {
     private IEnumerable<OSR_APP.Models.SetOfffw> setoffData;

@@ -24,93 +24,96 @@
             word-break: break-word;
         }
     </style>
-    <h3>Ready</h3>
-    <hr />
-    @if (IsLoading)
-    {
-        <center>
-            <div class="loader"></div>
-        </center>
-    }
-    else
-    {
-        <MudTable Class="table-styled" Hover="true" Breakpoint="Breakpoint.Sm"
-                  Items="@readyData"
-                  GroupBy="@_groupDefinition"
-                  GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
-                  GroupFooterClass=""
-                  Dense="true">
-            <ColGroup>
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-                <col />
-            </ColGroup>
-            <HeaderContent>
-                <MudTh>Deal No</MudTh>
-                <MudTh>Deal Date</MudTh>
-                <MudTh>Branch Code</MudTh>
-                <MudTh>Branch Name</MudTh>
-                <MudTh>PS</MudTh>
-                <MudTh>SN</MudTh>
-                <MudTh>Cover Rate</MudTh>
-                <MudTh>Cust Rate</MudTh>
-                <MudTh>CCY</MudTh>
-                <MudTh>Amount</MudTh>
-                <MudTh>Equivalent PKR</MudTh>
-                <MudTh>Revenue</MudTh>
-                <MudTh>Spread</MudTh>
-                <MudTh>Dealer</MudTh>
-                <MudTh>Contact Person</MudTh>
-                <MudTh>Segment</MudTh>
-                <MudTh>CTRCCY</MudTh>
-                <MudTh>Deal Notes</MudTh>
-            </HeaderContent>
-            <GroupHeaderTemplate>
-                <MudTh Class="mud-table-cell-custom-group" colspan="18">@($"{context.GroupName}: {context.Key}")</MudTh>
-            </GroupHeaderTemplate>
-            <RowTemplate>
-                <MudTd>@context.DealNo</MudTd>
-                <MudTd>@context.DealDate.ToString("dd/MM/yyyy")</MudTd>
-                <MudTd>@context.BrCode</MudTd>
-                <MudTd>@context.BrName</MudTd>
-                <MudTd>@context.PS</MudTd>
-                <MudTd>@context.SN</MudTd>
-                <MudTd>@context.CoverRate</MudTd>
-                <MudTd>@context.CustRate</MudTd>
-                <MudTd>@context.CCY</MudTd>
-                <MudTd>@context.Amount</MudTd>
-                <MudTd>@context.EquivalentPKR</MudTd>
-                <MudTd>@context.Revenue</MudTd>
-                <MudTd>@context.Spread</MudTd>
-                <MudTd>@context.Dealer</MudTd>
-                <MudTd>@context.ContactPerson</MudTd>
-                <MudTd>@context.Segment</MudTd>
-                <MudTd>@context.CTRCCY</MudTd>
-                <MudTd>@context.DealNotes</MudTd>
-            </RowTemplate>
-            <PagerContent>
-                <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }" />
-            </PagerContent>
-            <GroupFooterTemplate>
-                <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="28">TOTAL ( Equivalent PKR: @context.Items.Sum((e) => Convert.ToDecimal(e.EquivalentPKR)) | Revenue: @context.Items.Sum((e) => Convert.ToDecimal(e.Revenue)) | Amount: @context.Items.Sum((e) => Convert.ToDecimal(e.Amount)) | Equivalent USD: 10,000 @* @context.Items.Sum((e) => Convert.ToDecimal(e.)) *@ | USD Spread: @context.Items.Sum((e) => Convert.ToDecimal(e.Spread)) ) </MudTh>
-            </GroupFooterTemplate>
-        </MudTable>
-    }
+
+    <div class="align-content-sm-around p-4">
+        <h3>Ready</h3>
+        <hr />
+        @if (IsLoading)
+        {
+            <center>
+                <div class="loader"></div>
+            </center>
+        }
+        else
+        {
+            <MudTable Class="table-styled" Hover="true" Breakpoint="Breakpoint.Sm"
+                      Items="@readyData"
+                      GroupBy="@_groupDefinition"
+                      GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
+                      GroupFooterClass=""
+                      Dense="true">
+                <ColGroup>
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                </ColGroup>
+                <HeaderContent>
+                    <MudTh>Deal No</MudTh>
+                    <MudTh>Deal Date</MudTh>
+                    <MudTh>Branch Code</MudTh>
+                    <MudTh>Branch Name</MudTh>
+                    <MudTh>PS</MudTh>
+                    <MudTh>SN</MudTh>
+                    <MudTh>Cover Rate</MudTh>
+                    <MudTh>Cust Rate</MudTh>
+                    <MudTh>CCY</MudTh>
+                    <MudTh>Amount</MudTh>
+                    <MudTh>Equivalent PKR</MudTh>
+                    <MudTh>Revenue</MudTh>
+                    <MudTh>Spread</MudTh>
+                    <MudTh>Dealer</MudTh>
+                    <MudTh>Contact Person</MudTh>
+                    <MudTh>Segment</MudTh>
+                    <MudTh>CTRCCY</MudTh>
+                    <MudTh>Deal Notes</MudTh>
+                </HeaderContent>
+                <GroupHeaderTemplate>
+                    <MudTh Class="mud-table-cell-custom-group" colspan="18">@($"{context.GroupName}: {context.Key}")</MudTh>
+                </GroupHeaderTemplate>
+                <RowTemplate>
+                    <MudTd>@context.DealNo</MudTd>
+                    <MudTd>@context.DealDate.ToString("dd/MM/yyyy")</MudTd>
+                    <MudTd>@context.BrCode</MudTd>
+                    <MudTd>@context.BrName</MudTd>
+                    <MudTd>@context.PS</MudTd>
+                    <MudTd>@context.SN</MudTd>
+                    <MudTd>@context.CoverRate</MudTd>
+                    <MudTd>@context.CustRate</MudTd>
+                    <MudTd>@context.CCY</MudTd>
+                    <MudTd>@context.Amount</MudTd>
+                    <MudTd>@context.EquivalentPKR</MudTd>
+                    <MudTd>@context.Revenue</MudTd>
+                    <MudTd>@context.Spread</MudTd>
+                    <MudTd>@context.Dealer</MudTd>
+                    <MudTd>@context.ContactPerson</MudTd>
+                    <MudTd>@context.Segment</MudTd>
+                    <MudTd>@context.CTRCCY</MudTd>
+                    <MudTd>@context.DealNotes</MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }" />
+                </PagerContent>
+                <GroupFooterTemplate>
+                    <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="28">TOTAL ( Equivalent PKR: @context.Items.Sum((e) => Convert.ToDecimal(e.EquivalentPKR)) | Revenue: @context.Items.Sum((e) => Convert.ToDecimal(e.Revenue)) | Amount: @context.Items.Sum((e) => Convert.ToDecimal(e.Amount)) | Equivalent USD: 10,000 @* @context.Items.Sum((e) => Convert.ToDecimal(e.)) *@ | USD Spread: @context.Items.Sum((e) => Convert.ToDecimal(e.Spread)) ) </MudTh>
+                </GroupFooterTemplate>
+            </MudTable>
+        }
+    </div>
 </div>
 @code {
     private IEnumerable<OSR_APP.Models.Ready> readyData;

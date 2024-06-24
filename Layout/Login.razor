@@ -14,7 +14,7 @@
         font-family: Assistant, sans-serif;
         display: flex;
         flex-direction:column;
-        min-height: 90vh;
+        min-height: 100vh;
     }
 
     .login {
@@ -42,7 +42,7 @@
             text-align: center;
         }
 
-        .login .form input[type=text].text {
+        .text {
             border: none;
             background: none;
             box-shadow: 0px 2px 0px 0px white;
@@ -123,12 +123,13 @@
     <div class="body">
         <section class='login' id='login'>
             <div class='head'>
-                <h1 class='company'>OPICS SALES REPORT - HBL</h1>
+                <h2 class='company'>Opics Reporting - HBL</h2>
             </div>
             <p class='msg'>Welcome back</p>
             <div class='form'>
                 <form>
-                    <input type="text" placeholder='Username' class='text' id='username' required><br>
+                    <input type="text" placeholder='Username' class='text' id='username' required>
+                    <br>
                     <input type="password" placeholder='••••••••••••••' class='password'><br><br>
                     <a href="#" class='btn-login' id='do-login' @onclick="HandleLogin">Login</a>
                 </form>

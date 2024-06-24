@@ -11,138 +11,141 @@
         justify-content: space-evenly;
     }
 </style>
-<h3>Reporting Filters</h3>
-<hr />
-<div class="p-4 filter-wrapper">
+<div class="align-content-sm-around p-4 ">
+    <h3>Reporting Filters</h3>
+    <hr />
+    <div class="filter-wrapper">
 
-    <div class="row">
-        <div class="col-md-2">Deal Number</div>
-        <div class="col-md-4">
-            <input class="form-control" @bind="dealNumber" />
-        </div>
-        <div class="col-md-2">To</div>
-        <div class="col-md-4">
-            <input class="form-control" @bind="dealNumber" />
-        </div>
-    </div>
-    <hr />
-    <div class="row">
-        <div class="col-md-2">Entry Date From</div>
-        <div class="col-md-4">
-            <InputDate @bind-Value="entryDateFrom" />
-        </div>
-        <div class="col-md-2">To</div>
-        <div class="col-md-4">
-            <InputDate @bind-Value="entryDateTo" />
-        </div>
-    </div>
-    <hr />
-    <div class="row">
-        <div class="col-md-2">Contact Date From</div>
-        <div class="col-md-4">
-            <InputDate @bind-Value="contactDateFrom" />
-        </div>
-        <div class="col-md-2">To</div>
-        <div class="col-md-4">
-            <InputDate @bind-Value="contactDateTo" />
-        </div>
-    </div>
-    <hr />
-    <div class="row">
-        <div class="col-md-2">Value Date From</div>
-        <div class="col-md-4">
-            <InputDate @bind-Value="valueDateFrom" />
-        </div>
-        <div class="col-md-2">To</div>
-        <div class="col-md-4">
-            <InputDate @bind-Value="valueDateTo" />
-        </div>
-    </div>
-
-    <hr />
-    <div class="row">
-        <div class="col-md-2">Group By</div>
-        <div class="col-md-10">
-            <div class="form-check">
-                <InputRadioGroup @bind-Value="groupBy">
-                    Portfolio <InputRadio Value="portfolio">
-                        <label class="form-check-label">Portfolio</label>
-                    </InputRadio>
-                    <br />
-                    Currency  <InputRadio Value="currency">
-                        <label class="form-check-label">Currency</label>
-                    </InputRadio>
-                    <br />
-                    DealNumber  <InputRadio Value="dealNumber">
-                        <label class="form-check-label">DealNumber</label>
-                    </InputRadio>
-                </InputRadioGroup>
+        <div class="row">
+            <div class="col-md-2">Deal Number</div>
+            <div class="col-md-4">
+                <input class="form-control" @bind="dealNumber" />
+            </div>
+            <div class="col-md-2">To</div>
+            <div class="col-md-4">
+                <input class="form-control" @bind="dealNumber" />
             </div>
         </div>
-    </div>
-    <hr />
-    <div class="row">
-        <div class="col-md-6">
-            <select class="form-control" @bind="branchCode">
-                <option value="">Select Branch Code</option>
-            </select>
+        <hr />
+        <div class="row">
+            <div class="col-md-2">Entry Date From</div>
+            <div class="col-md-4">
+                <InputDate @bind-Value="entryDateFrom" />
+            </div>
+            <div class="col-md-2">To</div>
+            <div class="col-md-4">
+                <InputDate @bind-Value="entryDateTo" />
+            </div>
         </div>
-        <div class="col-md-6">
-            <select class="form-control" @bind="currency">
-                <option value="">Select Currency</option>
-            </select>
+        <hr />
+        <div class="row">
+            <div class="col-md-2">Contact Date From</div>
+            <div class="col-md-4">
+                <InputDate @bind-Value="contactDateFrom" />
+            </div>
+            <div class="col-md-2">To</div>
+            <div class="col-md-4">
+                <InputDate @bind-Value="contactDateTo" />
+            </div>
         </div>
-    </div>
-   
-    <br />
-    <div class="row">
-        <div class="col-md-6">
-            <select class="form-control" @bind="portfolio">
-                <option value="">Select Portfolio</option>
-            </select>
+        <hr />
+        <div class="row">
+            <div class="col-md-2">Value Date From</div>
+            <div class="col-md-4">
+                <InputDate @bind-Value="valueDateFrom" />
+            </div>
+            <div class="col-md-2">To</div>
+            <div class="col-md-4">
+                <InputDate @bind-Value="valueDateTo" />
+            </div>
         </div>
-        <div class="col-md-6">
-            <select class="form-control" @bind="trader">
-                <option value="">Select Trader</option>
-            </select>
+
+        <hr />
+        <div class="row">
+            <div class="col-md-2">Group By</div>
+            <div class="col-md-10">
+                <div class="form-check">
+                    <InputRadioGroup @bind-Value="groupBy">
+                        Portfolio <InputRadio Value="portfolio">
+                            <label class="form-check-label">Portfolio</label>
+                        </InputRadio>
+                        <br />
+                        Currency  <InputRadio Value="currency">
+                            <label class="form-check-label">Currency</label>
+                        </InputRadio>
+                        <br />
+                        DealNumber  <InputRadio Value="dealNumber">
+                            <label class="form-check-label">DealNumber</label>
+                        </InputRadio>
+                    </InputRadioGroup>
+                </div>
+            </div>
         </div>
-    </div>
-    
-    <br />
-    <div class="row">
-        <div class="col-md-6">
-            <select class="form-control" @bind="customer">
-                <option value="">Select Customer</option>
-            </select>
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <select class="form-control" @bind="branchCode">
+                    <option value="">Select Branch Code</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" @bind="currency">
+                    <option value="">Select Currency</option>
+                </select>
+            </div>
         </div>
-        <div class="col-md-6">
-            <select class="form-control" @bind="ps">
-                <option value="">Purchase</option>
-                <option value="">Sale</option>
-            </select>
+
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <select class="form-control" @bind="portfolio">
+                    <option value="">Select Portfolio</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" @bind="trader">
+                    <option value="">Select Trader</option>
+                </select>
+            </div>
         </div>
-    </div>
-   
-    <br />
-    <button class="cssbuttons-io-button" @onclick="GenerateReport">
-        Get Report
-        <div class="icon">
-            <svg height="24"
-                 width="24"
-                 viewBox="0 0 24 24"
-                 xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-                      fill="currentColor"></path>
-            </svg>
+
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <select class="form-control" @bind="customer">
+                    <option value="">Select Customer</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" @bind="ps">
+                    <option value="">Purchase</option>
+                    <option value="">Sale</option>
+                </select>
+            </div>
         </div>
-    </button>
+
+        <br />
+        <button class="cssbuttons-io-button" @onclick="GenerateReport">
+            Get Report
+            <div class="icon">
+                <svg height="24"
+                     width="24"
+                     viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                          fill="currentColor"></path>
+                </svg>
+            </div>
+        </button>
 
 
 
+    </div>
 </div>
+
 @code {
-    bool dealNumber;
+    string dealNumber;
     DateTime entryDateFrom = DateTime.Now;
     DateTime entryDateTo = DateTime.Now;
     DateTime contactDateFrom = DateTime.Now;
