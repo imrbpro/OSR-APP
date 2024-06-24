@@ -25,9 +25,22 @@
             word-break: break-word;
         }
     </style>
-
-    <MudTable Class="table-styled" Hover="true" Breakpoint="Breakpoint.Sm" FixedHeader="true"
-              Items="@setoffData"
+     <h3>SetOff</h3>
+    <hr />
+    @if (IsLoading)
+    {
+        <center>
+            <div class="loader"></div>
+        </center>
+    }
+    else
+    {
+        <MudTable Class
+        ="table-styled" Hover
+        ="true" Breakpoint
+        ="Breakpoint.Sm" FixedHeader
+        ="true"
+        Items="@setoffData"
               GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
               GroupFooterClass="mb-4"
               Dense="true">
@@ -96,16 +109,19 @@
             <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }" />
         </PagerContent>
     </MudTable>
+    }
 </div>
 @code {
     private IEnumerable<OSR_APP.Models.SetOfffw> setoffData;
     Dictionary<string, string> dictionary = new Dictionary<string, string>();
     private string searchString = "";
-
+    private bool IsLoading = false;
     protected override async Task OnInitializedAsync()
     {
+        IsLoading = true;
         var response = await setoffService.GetSetOffData();
         setoffData = response["setoffData"];
+        IsLoading = false;
     }
     private void OnSearch(string text)
     {
