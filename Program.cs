@@ -20,6 +20,7 @@ namespace OSR_APP
             builder.Services.AddTransient<IDiscountingService, DiscountingService>();
             builder.Services.AddTransient<IForwardService, ForwardService>();
             builder.Services.AddTransient<ISetofffwService, SetOffService>();
+            builder.Services.AddTransient<ICloseoutService, CloseoutService>();
 
             builder.Services.AddMudServices();
             await builder.Build().RunAsync();

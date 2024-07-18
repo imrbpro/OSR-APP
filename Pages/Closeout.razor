@@ -1,0 +1,160 @@
+﻿@page "/closeout"
+@using MudBlazor
+@using OSR_APP.Services.Interface
+@using Newtonsoft.Json;
+@inject ICloseoutService closeoutService
+<div class="col-sm-12 table-container-styled">
+    <style>
+        .mud-table-cell-custom-group {
+            font-weight: 500;
+        }
+
+        .mud-table-cell-custom-group-footer {
+            padding-bottom: 50px;
+            text-align: Left;
+        }
+
+        .table-container-styled {
+            table-layout: fixed;
+            display: table;
+        }
+
+        .table-styled {
+            text-wrap: nowrap !important;
+            word-break: break-word;
+        }
+    </style>
+
+    <div class="align-content-sm-around p-4">
+        <h3>Closeout</h3>
+        <hr />
+        @if (IsLoading)
+        {
+            <center>
+                <div class="loader"></div>
+            </center>
+        }
+        else
+        {
+            <MudTable Class="table-styled" Hover="true" Breakpoint="Breakpoint.Sm"
+                      Items="@closeoutData"
+                      GroupBy="@_groupDefinition"
+                      GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
+                      GroupFooterClass=""
+                      Dense="true">
+                <ColGroup>
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                </ColGroup>
+                <HeaderContent>
+                    <MudTh>DEALNO</MudTh>
+                    <MudTh>DEALDATE</MudTh>
+                    <MudTh>ODATE</MudTh>
+                    <MudTh>MaturityDate</MudTh>
+                    <MudTh>days</MudTh>
+                    <MudTh>contact</MudTh>
+                    <MudTh>SPOTRATE_8</MudTh>
+                    <MudTh>BRCODE</MudTh>
+                    <MudTh>BRNAME</MudTh>
+                    <MudTh>PS</MudTh>
+                    <MudTh>PORT</MudTh>
+                    <MudTh>CCY</MudTh>
+                    <MudTh>AMOUNT</MudTh>
+                    <MudTh>CUSTRATE</MudTh>
+                    <MudTh>TotalPremuim</MudTh>
+                    <MudTh>EQUIVPKR</MudTh>
+                    <MudTh>CUSTOMER</MudTh>
+                    <MudTh>Remarks</MudTh>
+                </HeaderContent>
+                <GroupHeaderTemplate>
+                    <MudTh Class="mud-table-cell-custom-group" colspan="18">@($"{context.GroupName}: {context.Key}")</MudTh>
+                </GroupHeaderTemplate>
+                <RowTemplate>
+                    <MudTd>@context.DEALNO</MudTd>
+                    <MudTd>@context.DEALDATE</MudTd>
+                    <MudTd>@context.ODATE</MudTd>
+                    <MudTd>@context.MaturityDate</MudTd>
+                    <MudTd>@context.days</MudTd>
+                    <MudTd>@context.contact</MudTd>
+                    <MudTd>@context.SPOTRATE_8</MudTd>
+                    <MudTd>@context.BRCODE</MudTd>
+                    <MudTd>@context.BRNAME</MudTd>
+                    <MudTd>@context.PS</MudTd>
+                    <MudTd>@context.PORT</MudTd>
+                    <MudTd>@context.CCY</MudTd>
+                    <MudTd>@context.AMOUNT</MudTd>
+                    <MudTd>@context.CUSTRATE</MudTd>
+                    <MudTd>@context.TotalPremuim</MudTd>
+                    <MudTd>@context.EQUIVPKR</MudTd>
+                    <MudTd>@context.CUSTOMER</MudTd>
+                    <MudTd>@context.Remarks</MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }" />
+                </PagerContent>
+                <GroupFooterTemplate>
+                    <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="18">TOTAL ( Equivalent PKR: @context.Items.Sum((e) => Convert.ToDecimal(e.EQUIVPKR)) | Amount: @context.Items.Sum((e) => Convert.ToDecimal(e.AMOUNT)) ) </MudTh>
+                </GroupFooterTemplate>
+            </MudTable>
+        }
+    </div>
+</div>
+@code {
+    private IEnumerable<OSR_APP.Models.Closeout> closeoutData;
+    Dictionary<string, string> dictionary = new Dictionary<string, string>();
+    private string searchString = "";
+    private bool IsLoading = false;
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+        var response = await closeoutService.GetCloseoutData();
+        closeoutData = response["closeoutData"];
+        IsLoading = false;
+    }
+
+    private TableGroupDefinition<OSR_APP.Models.Closeout> _groupDefinition = new()
+        {
+            GroupName = "Portfolio",
+            Indentation = false,
+            Expandable = true,
+            IsInitiallyExpanded = true,
+            Selector = (e) => e.PORT
+        };
+    private void OnSearch(string text)
+    {
+        closeoutData = closeoutData.Where(r =>
+        r.DEALNO.ToString().Contains(text) ||
+        r.BRCODE.Contains(text, StringComparison.OrdinalIgnoreCase) ||
+        r.BRNAME.Contains(text, StringComparison.OrdinalIgnoreCase)
+        );
+    }
+
+    private bool FilterReady(Models.Closeout element) => FilterFunc(element, searchString);
+
+    private bool FilterFunc(Models.Closeout closeout, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (closeout.DEALNO.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (closeout.BRNAME.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}
