@@ -41,7 +41,12 @@
                       GroupBy="@_groupDefinition"
                       GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
                       GroupFooterClass=""
-                      Dense="true">
+                      Dense="true"
+                      Filter="new Func<OSR_APP.Models.Closeout,bool>(FilterFunc)">
+
+                <ToolBarContent>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search... " Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Style="width:250px !important"></MudTextField>
+                </ToolBarContent>
                 <ColGroup>
                     <col />
                     <col />
@@ -136,25 +141,35 @@
             IsInitiallyExpanded = true,
             Selector = (e) => e.PORT
         };
-    private void OnSearch(string text)
+    private bool FilterFunc(Models.Closeout closeout)
     {
-        closeoutData = closeoutData.Where(r =>
-        r.DEALNO.ToString().Contains(text) ||
-        r.BRCODE.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-        r.BRNAME.Contains(text, StringComparison.OrdinalIgnoreCase)
-        );
-    }
-
-    private bool FilterReady(Models.Closeout element) => FilterFunc(element, searchString);
-
-    private bool FilterFunc(Models.Closeout closeout, string searchString)
-    {
+        IsLoading = true;
         if (string.IsNullOrWhiteSpace(searchString))
+        {
+            IsLoading = false;
             return true;
+        }
         if (closeout.DEALNO.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
             return true;
+        }
         if (closeout.BRNAME.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
             return true;
+        }
+        if (closeout.BRCODE.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
+            return true;
+        }
+        if (closeout.PORT.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
+            return true;
+        }
+        IsLoading = false;
         return false;
     }
 }

@@ -41,7 +41,12 @@
                       GroupBy="@_groupDefinition"
                       GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
                       GroupFooterClass=""
-                      Dense="true">
+                      Dense="true"
+                      Filter="new Func<OSR_APP.Models.Ready,bool>(FilterFunc)">
+
+                <ToolBarContent>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search... " Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Style="width:250px !important"></MudTextField>
+                </ToolBarContent>
                 <ColGroup>
                     <col />
                     <col />
@@ -136,25 +141,30 @@
             IsInitiallyExpanded = true,
             Selector = (e) => e.Segment
         };
-    private void OnSearch(string text)
-    {
-        readyData = readyData.Where(r =>
-        r.DealNo.ToString().Contains(text) ||
-        r.BrCode.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-        r.BrName.Contains(text, StringComparison.OrdinalIgnoreCase)
-        );
-    }
 
-    private bool FilterReady(Models.Ready element) => FilterFunc(element, searchString);
-
-    private bool FilterFunc(Models.Ready ready, string searchString)
+    private bool FilterFunc(Models.Ready ready)
     {
         if (string.IsNullOrWhiteSpace(searchString))
+        {
+            IsLoading = false;
             return true;
+        }
         if (ready.DealNo.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
             return true;
+        }
         if (ready.BrName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
             return true;
+        }
+        if (ready.Segment.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
+            return true;
+        }
+        IsLoading = false;
         return false;
     }
 }

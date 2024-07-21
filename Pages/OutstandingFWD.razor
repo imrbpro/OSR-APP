@@ -41,7 +41,12 @@
                       Items="@outstandingFWDs"
                       GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
                       GroupFooterClass="mb-4"
-                      Dense="true">
+                      Dense="true"
+                      Filter="new Func<OSR_APP.Models.OutstandingFWD,bool>(FilterFunc)">
+
+                <ToolBarContent>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search... " Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Style="width:250px !important"></MudTextField>
+                </ToolBarContent>
                 <HeaderContent>
                     <MudTh>DealNo</MudTh>
                     <MudTh>DealDate</MudTh>
@@ -102,25 +107,30 @@
         outstandingFWDs = response["outstandingfwdData"];
         IsLoading = false;
     }
-    private void OnSearch(string text)
+    private bool FilterFunc(Models.OutstandingFWD outstandingFWD)
     {
-        outstandingFWDs = outstandingFWDs.Where(r =>
-          r.DealNo.ToString().Contains(text) ||
-          r.CurrencyCodes.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-          r.BrCode.Contains(text, StringComparison.OrdinalIgnoreCase)
-        );
-    }
-
-    private bool FilterReady(Models.OutstandingFWD element) => FilterFunc(element, searchString);
-
-    private bool FilterFunc(Models.OutstandingFWD outstandingFWD, string searchString)
-    {
+        IsLoading = true;
         if (string.IsNullOrWhiteSpace(searchString))
+        {
+            IsLoading = false;
             return true;
+        }
         if (outstandingFWD.DealNo.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
             return true;
+        }
         if (outstandingFWD.BrCode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
             return true;
+        }
+        if (outstandingFWD.CurrencyCodes.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
+            return true;
+        }
+        IsLoading = false;
         return false;
     }
 }

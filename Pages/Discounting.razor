@@ -40,7 +40,12 @@
                       GroupBy="@_groupDefinition"
                       GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
                       GroupFooterClass=""
-                      Dense="true">
+                      Dense="true"
+                      Filter="new Func<OSR_APP.Models.Discounting,bool>(FilterFunc)">
+
+                <ToolBarContent>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search... " Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Style="width:250px !important"></MudTextField>
+                </ToolBarContent>
                 <ColGroup>
                     <col />
                     <col />
@@ -165,25 +170,36 @@
             IsInitiallyExpanded = true,
             Selector = (e) => e.Port
         };
-    private void OnSearch(string text)
-    {
-        discountingData = discountingData.Where(r =>
-          r.DealNo.ToString().Contains(text) ||
-          r.BrCode.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-          r.BrName.Contains(text, StringComparison.OrdinalIgnoreCase)
-        );
-    }
 
-    private bool FilterReady(Models.Discounting element) => FilterFunc(element, searchString);
-
-    private bool FilterFunc(Models.Discounting ready, string searchString)
+    private bool FilterFunc(Models.Discounting discount)
     {
+        IsLoading = true;
         if (string.IsNullOrWhiteSpace(searchString))
+        {
+            IsLoading = false;
             return true;
-        if (ready.DealNo.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        }
+        if (discount.DealNo.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
             return true;
-        if (ready.BrName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        }
+        if (discount.BrName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
             return true;
+        }
+        if (discount.BrCode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
+            return true;
+        }
+        if (discount.Port.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
+            return true;
+        }
+        IsLoading = false;
         return false;
     }
 }

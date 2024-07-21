@@ -41,7 +41,12 @@
                       Items="@setoffData"
                       GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
                       GroupFooterClass="mb-4"
-                      Dense="true">
+                      Dense="true"
+                      Filter="new Func<OSR_APP.Models.SetOfffw,bool>(FilterFunc)">
+
+                <ToolBarContent>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search... " Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0" Style="width:250px !important"></MudTextField>
+                </ToolBarContent>
                 <HeaderContent>
                     <MudTh>DealNumber</MudTh>
                     <MudTh>TakeDownDate</MudTh>
@@ -122,25 +127,30 @@
         setoffData = response["setoffData"];
         IsLoading = false;
     }
-    private void OnSearch(string text)
+    private bool FilterFunc(Models.SetOfffw setOfffw)
     {
-        setoffData = setoffData.Where(r =>
-          r.DealNumber.ToString().Contains(text) ||
-          r.DealersID.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-          r.BrCode.Contains(text, StringComparison.OrdinalIgnoreCase)
-        );
-    }
-
-    private bool FilterReady(Models.SetOfffw element) => FilterFunc(element, searchString);
-
-    private bool FilterFunc(Models.SetOfffw setOfffw, string searchString)
-    {
+        IsLoading = true;
         if (string.IsNullOrWhiteSpace(searchString))
+        {
+            IsLoading = false;
             return true;
+        }
         if (setOfffw.DealNumber.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
             return true;
+        }
         if (setOfffw.BrCode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
             return true;
+        }
+        if (setOfffw.DealersID.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        {
+            IsLoading = false;
+            return true;
+        }
+        IsLoading = false;
         return false;
     }
 }
