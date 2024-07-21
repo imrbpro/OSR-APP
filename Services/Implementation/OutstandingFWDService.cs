@@ -1,29 +1,27 @@
-﻿using Microsoft.AspNetCore.Components;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using OSR_APP.Models;
 using OSR_APP.Services.Interface;
 using System.Net;
 
 namespace OSR_APP.Services.Implementation
 {
-    public class CloseoutService : ICloseoutService
+    public class OutstandingFWDService : IOutstandingFWDService
     {
         private readonly HttpClient _http;
-        string baseApiURL = string.Empty;
-        public CloseoutService(HttpClient http, IConfiguration configuration)
+        private string baseApiURL = string.Empty;
+        public OutstandingFWDService(HttpClient http, IConfiguration configuration)
         {
             _http = http;
-            baseApiURL = $"{configuration["BackendApi"]}Closeout";
+            baseApiURL = $"{configuration["BackendApi"]}OutstandingFWD";
         }
-
         private void SetDefaultHeaders(HttpRequestMessage request)
         {
             //request.Headers.Add("Authorization", ""); 
             request.Headers.Add("Content-Type", "application/json");
         }
-        public async Task<Dictionary<string, IEnumerable<Closeout>>> GetCloseoutData()
+        public async Task<Dictionary<string, IEnumerable<OutstandingFWD>>> GetOutstandingFWDData()
         {
-            var dictionary = new Dictionary<string, IEnumerable<Closeout>>();
+            var dictionary = new Dictionary<string, IEnumerable<OutstandingFWD>>();
             try
             {
                 HttpResponseMessage result = await _http.GetAsync(baseApiURL);
@@ -31,8 +29,8 @@ namespace OSR_APP.Services.Implementation
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     var response = await result.Content.ReadAsStringAsync();
-                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse<IEnumerable<Closeout>>>(response);
-                    dictionary.Add("closeoutData", apiResponse.Data);
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse<IEnumerable<OutstandingFWD>>>(response);
+                    dictionary.Add("outstandingfwdData", apiResponse.Data);
                     return dictionary;
                 }
                 else

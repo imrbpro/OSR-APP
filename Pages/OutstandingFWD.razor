@@ -1,0 +1,126 @@
+﻿@page "/outstandingfwd"
+@using MudBlazor
+@using OSR_APP.Services.Interface
+@using Newtonsoft.Json;
+@inject IOutstandingFWDService outstandingFWDService
+
+<div class="col-sm-12 table-container-styled">
+    <style>
+        .mud-table-cell-custom-group {
+            font-weight: 500;
+        }
+
+        .mud-table-cell-custom-group-footer {
+            padding-bottom: 50px;
+            text-align: left;
+        }
+
+        .table-container-styled {
+            table-layout: fixed;
+            display: table;
+        }
+
+        .table-styled {
+            text-wrap: nowrap !important;
+            word-break: break-word;
+        }
+    </style>
+
+    <div class="align-content-sm-around p-4">
+        <h3>Outstanding FWD</h3>
+        <hr />
+        @if (IsLoading)
+        {
+            <center>
+                <div class="loader"></div>
+            </center>
+        }
+        else
+        {
+            <MudTable Class="table-styled" Hover="true" Breakpoint="Breakpoint.Sm" FixedHeader="true"
+                      Items="@outstandingFWDs"
+                      GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
+                      GroupFooterClass="mb-4"
+                      Dense="true">
+                <HeaderContent>
+                    <MudTh>DealNo</MudTh>
+                    <MudTh>DealDate</MudTh>
+                    <MudTh>OptionStartDate</MudTh>
+                    <MudTh>ValueDate</MudTh>
+                    <MudTh>CoverRate</MudTh>
+                    <MudTh>CustomerRate</MudTh>
+                    <MudTh>BrCode</MudTh>
+                    <MudTh>CustName</MudTh>
+                    <MudTh>CurrencyCodes</MudTh>
+                    <MudTh>BookedAmount</MudTh>
+                    <MudTh>SetOffAmount</MudTh>
+                    <MudTh>BalanceAmount</MudTh>
+                    <MudTh>TotalPremium</MudTh>
+                    <MudTh>TotalOptionDays</MudTh>
+                    <MudTh>USDEq</MudTh>
+                    <MudTh>Remarks</MudTh>
+                    <MudTh>Type</MudTh>
+                    <MudTh>TotalOptionPremium</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>@context.DealNo</MudTd>
+                    <MudTd>@context.DealDate</MudTd>
+                    <MudTd>@context.OptionStartDate</MudTd>
+                    <MudTd>@context.ValueDate</MudTd>
+                    <MudTd>@context.CoverRate</MudTd>
+                    <MudTd>@context.CustomerRate</MudTd>
+                    <MudTd>@context.BrCode</MudTd>
+                    <MudTd>@context.CustName</MudTd>
+                    <MudTd>@context.CurrencyCodes</MudTd>
+                    <MudTd>@context.BookedAmount</MudTd>
+                    <MudTd>@context.SetOffAmount</MudTd>
+                    <MudTd>@context.BalanceAmount</MudTd>
+                    <MudTd>@context.TotalPremium</MudTd>
+                    <MudTd>@context.TotalOptionDays</MudTd>
+                    <MudTd>@context.USDEq</MudTd>
+                    <MudTd>@context.Remarks</MudTd>
+                    <MudTd>@context.Type</MudTd>
+                    <MudTd>@context.TotalOptionPremium</MudTd>
+                </RowTemplate>
+
+                <PagerContent>
+                    <MudTablePager PageSizeOptions="new int[] { 10, 25, 50, 100, int.MaxValue }" />
+                </PagerContent>
+            </MudTable>
+        }
+    </div>
+</div>
+@code {
+    private IEnumerable<OSR_APP.Models.OutstandingFWD> outstandingFWDs;
+    Dictionary<string, string> dictionary = new Dictionary<string, string>();
+    private string searchString = "";
+    private bool IsLoading = false;
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+        var response = await outstandingFWDService.GetOutstandingFWDData();
+        outstandingFWDs = response["outstandingfwdData"];
+        IsLoading = false;
+    }
+    private void OnSearch(string text)
+    {
+        outstandingFWDs = outstandingFWDs.Where(r =>
+          r.DealNo.ToString().Contains(text) ||
+          r.CurrencyCodes.Contains(text, StringComparison.OrdinalIgnoreCase) ||
+          r.BrCode.Contains(text, StringComparison.OrdinalIgnoreCase)
+        );
+    }
+
+    private bool FilterReady(Models.OutstandingFWD element) => FilterFunc(element, searchString);
+
+    private bool FilterFunc(Models.OutstandingFWD outstandingFWD, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (outstandingFWD.DealNo.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (outstandingFWD.BrCode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}
