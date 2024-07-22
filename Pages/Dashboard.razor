@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject NavigationManager navigation
+@inject ISnackbar Snackbar
 <PageTitle>Dashboard</PageTitle>
 <style>
     .filter-wrapper{
@@ -15,7 +16,17 @@
     <h3>Reporting Filters</h3>
     <hr />
     <div class="filter-wrapper">
-
+        <div class="row">
+            <MudSelect T="NavigationPages" Label="Report" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter" @bind-Value="SelectedValue">
+                <MudSelectItem Value="@(new NavigationPages("ready"))" />
+                <MudSelectItem Value="@(new NavigationPages("discounting"))" />
+                <MudSelectItem Value="@(new NavigationPages("forward"))" />
+                <MudSelectItem Value="@(new NavigationPages("Setoff"))" />
+                <MudSelectItem Value="@(new NavigationPages("Closeout"))" />
+                <MudSelectItem Value="@(new NavigationPages("outstandingfwd"))" />
+            </MudSelect>
+        </div>
+        <br />
         <div class="row">
             <div class="col-md-2">Deal Number</div>
             <div class="col-md-4">
@@ -145,6 +156,7 @@
 </div>
 
 @code {
+    private NavigationPages SelectedValue;
     string dealNumber;
     DateTime entryDateFrom = DateTime.Now;
     DateTime entryDateTo = DateTime.Now;
@@ -157,6 +169,33 @@
 
     private void GenerateReport()
     {
-        navigation.NavigateTo("/ready");
+        if (SelectedValue != null)
+        {
+            navigation.NavigateTo("/" + SelectedValue.Name);
+        }
+        else
+        {
+            Snackbar.Add("Please Select Report First...", Severity.Error);
+        }
+    }
+
+    public class NavigationPages
+    {
+        public NavigationPages(string name)
+        {
+            Name = name;
+        }
+
+        public readonly string Name;
+
+        public override bool Equals(object o)
+        {
+            var other = o as NavigationPages;
+            return other?.Name == Name;
+        }
+
+        public override int GetHashCode() => Name?.GetHashCode() ?? 0;
+
+        public override string ToString() => Name;
     }
 }
