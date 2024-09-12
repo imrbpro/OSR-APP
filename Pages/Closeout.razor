@@ -1,4 +1,5 @@
 ﻿@page "/closeout"
+@page "/closeout/{DealNo}/{DealNoTo}/{ContractDate:datetime}/{ContractDateTo:datetime}/{ValueDate:datetime}/{ValueDateTo:datetime}/{EntryDate:datetime}/{EntryDateTo:datetime}/{Ccy}/{Portfolio}/{Broker}/{Customer}/{OrderBy:int}"
 @using MudBlazor
 @using OSR_APP.Services.Interface
 @using Newtonsoft.Json;
@@ -121,14 +122,69 @@
     </div>
 </div>
 @code {
+
+    [Parameter] 
+    [SupplyParameterFromQuery]
+    public string DealNo { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string DealNoTo { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public DateTime ContractDate { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public DateTime ContractDateTo { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public DateTime ValueDate { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public DateTime ValueDateTo { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public DateTime EntryDate { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public DateTime EntryDateTo { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Ccy { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Portfolio { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Broker { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Customer { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int OrderBy { get; set; }
+
     private IEnumerable<OSR_APP.Models.Closeout> closeoutData;
     Dictionary<string, string> dictionary = new Dictionary<string, string>();
     private string searchString = "";
     private bool IsLoading = false;
     protected override async Task OnInitializedAsync()
     {
-        IsLoading = true;
-        var response = await closeoutService.GetCloseoutData();
+        IsLoading = true; 
+        var response = await closeoutService.GetCloseoutData(
+            DealNo,
+            DealNoTo,
+            ContractDate,
+            ContractDateTo,
+            ValueDate,
+            ValueDateTo,
+            EntryDate,
+            EntryDateTo,
+            Ccy,
+            Portfolio,
+            Broker,
+            Customer,
+            OrderBy
+        );
         closeoutData = response["closeoutData"];
         IsLoading = false;
     }

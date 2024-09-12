@@ -1,9 +1,11 @@
 ﻿@page "/"
+@using OSR_APP.Services.Interface
 @inject NavigationManager navigation
 @inject ISnackbar Snackbar
+@inject IFilterService filterService
 <PageTitle>Dashboard</PageTitle>
 <style>
-    .filter-wrapper{
+    .filter-wrapper {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -34,7 +36,7 @@
             </div>
             <div class="col-md-2">To</div>
             <div class="col-md-4">
-                <input class="form-control" @bind="dealNumber" />
+                <input class="form-control" @bind="dealNumberTo" />
             </div>
         </div>
         <hr />
@@ -95,28 +97,53 @@
         <hr />
         <div class="row">
             <div class="col-md-6">
-                <select class="form-control" @bind="branchCode">
-                    <option value="">Select Branch Code</option>
-                </select>
+                <MudSelect class="form-control" T="string" Placeholder="Branch Code">
+                    @if (branchCodeData != null)
+                    {
+                        foreach (var brcode in branchCodeData)
+                        {
+                            <MudSelectItem T="string" Value="@brcode">@brcode</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
             </div>
             <div class="col-md-6">
-                <select class="form-control" @bind="currency">
-                    <option value="">Select Currency</option>
-                </select>
+                <MudSelect class="form-control" T="string" Placeholder="Currency">
+                    @if (currencyData != null)
+                    {
+                        foreach (var currency in currencyData)
+                        {
+                            <MudSelectItem T="string" Value="@currency">@currency</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
             </div>
         </div>
 
         <br />
         <div class="row">
             <div class="col-md-6">
-                <select class="form-control" @bind="portfolio">
-                    <option value="">Select Portfolio</option>
-                </select>
+                <MudSelect class="form-control" T="string" Placeholder="Portfolio">
+                    @if (portfolioData != null)
+                    {
+                        foreach (var portfolio in portfolioData)
+                        {
+                            <MudSelectItem T="string" Value="@portfolio">@portfolio</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
             </div>
             <div class="col-md-6">
-                <select class="form-control" @bind="trader">
-                    <option value="">Select Trader</option>
-                </select>
+                <MudSelect class="form-control" T="string" Placeholder="Trader">
+                    @if(traderData != null)
+                    {
+                        foreach (var trader in traderData)
+                        {
+                            <MudSelectItem T="string" Value="@trader">@trader</MudSelectItem>
+                        }
+                    }
+                    
+                </MudSelect>
             </div>
         </div>
 
@@ -156,21 +183,65 @@
 </div>
 
 @code {
+    private string value { get; set; } = "Select Option";
     private NavigationPages SelectedValue;
-    string dealNumber;
-    DateTime entryDateFrom = DateTime.Now;
-    DateTime entryDateTo = DateTime.Now;
-    DateTime contactDateFrom = DateTime.Now;
-    DateTime contactDateTo = DateTime.Now;
-    DateTime valueDateFrom = DateTime.Now;
-    DateTime valueDateTo = DateTime.Now;
-    bool branchCode, currency, portfolio, trader, customer, ps;
-    string groupBy;
 
+    string dealNumber { get; set; }
+    string dealNumberTo { get; set; }
+    string groupBy { get; set; }
+
+    string entryDateFrom { get; set; }
+    string entryDateTo { get; set; }
+    string contactDateFrom { get; set; }
+    string contactDateTo { get; set; }
+    string valueDateFrom { get; set; }
+    string valueDateTo { get; set; }
+    bool branchCode, currency, portfolio, trader, customer,  ps;
+    private bool IsLoading = false;
+    private IEnumerable<string> branchCodeData, currencyData, portfolioData, traderData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsLoading = true;
+
+        var branchCode = await filterService.GetBranchCode();
+        var currency = await filterService.GetCurrency();
+        var portfolio = await filterService.GetPortfolio();
+        var trader = await filterService.GetTrader();
+
+        branchCodeData = branchCode["branchCodeData"];
+        currencyData = currency["currencyData"];
+        portfolioData = portfolio["portfolioData"];
+        traderData = trader["traderData"];
+
+        IsLoading = false;
+    }
     private void GenerateReport()
     {
         if (SelectedValue != null)
         {
+            switch (SelectedValue.Name.ToString())
+            {
+                case "ready":
+                    navigation.NavigateTo("/" + SelectedValue.Name);
+                    break;
+                case "discounting":
+                    navigation.NavigateTo("/" + SelectedValue.Name);
+                    break;
+                case "forward":
+                    navigation.NavigateTo("/" + SelectedValue.Name);
+                    break;
+                case "setoff":
+                    navigation.NavigateTo("/" + SelectedValue.Name);
+                    break;
+                case "closeout":
+                    navigation.NavigateTo("/" + SelectedValue.Name + "?DealNo=" + dealNumber + "&DealNoTo=" + dealNumberTo + "&ContractDate=" + contactDateFrom + "&ContractDateTo=" + contactDateTo + "&ValueDate=" + valueDateFrom + "&ValueDateTo=" + valueDateTo + "&EntryDate=" + entryDateFrom + "&EntryDateTo=" + entryDateTo + "&Ccy=" + currency + "&Portfolio=" + portfolio + "&Broker=" + trader + "&Customer=" + customer + "&OrderBy=" + ps);
+                    break;
+                case "outstandingfwd":
+                    navigation.NavigateTo("/" + SelectedValue.Name);
+                    break;
+
+            }
             navigation.NavigateTo("/" + SelectedValue.Name);
         }
         else

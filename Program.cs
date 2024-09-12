@@ -22,6 +22,7 @@ namespace OSR_APP
             builder.Services.AddTransient<ISetofffwService, SetOffService>();
             builder.Services.AddTransient<ICloseoutService, CloseoutService>();
             builder.Services.AddTransient<IOutstandingFWDService, OutstandingFWDService>();
+            builder.Services.AddTransient<IFilterService, FilterService>();
 
             builder.Services.AddMudServices();
             await builder.Build().RunAsync();

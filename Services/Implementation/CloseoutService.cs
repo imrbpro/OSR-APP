@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using OSR_APP.Models;
 using OSR_APP.Services.Interface;
 using System.Net;
+using System.Text;
 
 namespace OSR_APP.Services.Implementation
 {
@@ -21,12 +22,34 @@ namespace OSR_APP.Services.Implementation
             //request.Headers.Add("Authorization", ""); 
             request.Headers.Add("Content-Type", "application/json");
         }
-        public async Task<Dictionary<string, IEnumerable<Closeout>>> GetCloseoutData()
+        public async Task<Dictionary<string, IEnumerable<Closeout>>> GetCloseoutData(String dealNo, String dealNoTo, DateTime contractDate, DateTime contractDateTo, DateTime valueDate, DateTime valueDateTo, DateTime entryDate, DateTime entryDateTo, String ccy, String portfolio, String broker, String customer, int orderBy)
         {
             var dictionary = new Dictionary<string, IEnumerable<Closeout>>();
             try
             {
-                HttpResponseMessage result = await _http.GetAsync(baseApiURL);
+                var parameters = new Dictionary<string, object>()
+                {
+                  { "dealNo", dealNo },
+                  { "dealNoTo", dealNoTo },
+                  { "contractDate", contractDate },
+                  { "contractDateTo", contractDateTo },
+                  { "valueDate", valueDate },
+                  { "valueDateTo", valueDateTo },
+                  { "entryDate", entryDate },
+                  { "entryDateTo", entryDateTo },
+                  { "ccy", ccy },
+                  { "portfolio", portfolio },
+                  { "broker", broker },
+                  { "customer", customer },
+                  { "orderBy", orderBy }
+                };
+
+                // Build the query string from the parameters
+                var queryString = BuildQueryString(parameters);
+
+                var url = $"{baseApiURL}{queryString}";
+
+                HttpResponseMessage result = await _http.GetAsync(url);
                 var errorMessage = "";
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
@@ -45,6 +68,34 @@ namespace OSR_APP.Services.Implementation
             {
                 return null;
             }
+        }
+
+        public static string BuildQueryString(Dictionary<string, object> parameters)
+        {
+            var queryStringBuilder = new StringBuilder();
+
+            foreach (var kvp in parameters)
+            {
+                if (queryStringBuilder.Length > 0)
+                {
+                    queryStringBuilder.Append('&');
+                }
+                
+                if (kvp.Value is DateTime dateTime)
+                {
+                    queryStringBuilder.Append($"{kvp.Key}={dateTime.ToString("yyyy-MM-ddTHH:mm:ssZ")}");
+                }
+                else if (kvp.Value is bool boolean)
+                {
+                    queryStringBuilder.Append($"{kvp.Key}={boolean.ToString().ToLowerInvariant()}");
+                }
+                else
+                {
+                    queryStringBuilder.Append($"{kvp.Key}={Uri.EscapeDataString(kvp.Value?.ToString() ?? string.Empty)}");
+                }
+            }
+
+            return queryStringBuilder.ToString();
         }
     }
 }
