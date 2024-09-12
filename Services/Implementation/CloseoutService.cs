@@ -22,34 +22,37 @@ namespace OSR_APP.Services.Implementation
             //request.Headers.Add("Authorization", ""); 
             request.Headers.Add("Content-Type", "application/json");
         }
-        public async Task<Dictionary<string, IEnumerable<Closeout>>> GetCloseoutData(String dealNo, String dealNoTo, DateTime contractDate, DateTime contractDateTo, DateTime valueDate, DateTime valueDateTo, DateTime entryDate, DateTime entryDateTo, String ccy, String portfolio, String broker, String customer, int orderBy)
+        public async Task<Dictionary<string, IEnumerable<Closeout>>> GetCloseoutData(string? dealNo, string? dealNoTo, DateTime? contractDate, DateTime? contractDateTo, DateTime? valueDate, DateTime? valueDateTo, DateTime? entryDate, DateTime? entryDateTo, string? ccy, string? portfolio, string? broker, string? customer, int? orderBy)
         {
             var dictionary = new Dictionary<string, IEnumerable<Closeout>>();
             try
             {
-                var parameters = new Dictionary<string, object>()
+                var requestBody = new Dictionary<string, object>()
                 {
-                  { "dealNo", dealNo },
-                  { "dealNoTo", dealNoTo },
-                  { "contractDate", contractDate },
-                  { "contractDateTo", contractDateTo },
-                  { "valueDate", valueDate },
-                  { "valueDateTo", valueDateTo },
-                  { "entryDate", entryDate },
-                  { "entryDateTo", entryDateTo },
-                  { "ccy", ccy },
-                  { "portfolio", portfolio },
-                  { "broker", broker },
-                  { "customer", customer },
-                  { "orderBy", orderBy }
+                    { "dealNo", dealNo },
+                    { "dealNoTo", dealNoTo },
+                    { "contractDate", contractDate },
+                    { "contractDateTo", contractDateTo },
+                    { "valueDate", valueDate },
+                    { "valueDateTo", valueDateTo },
+                    { "entryDate", entryDate },
+                    { "entryDateTo", entryDateTo },
+                    { "ccy", ccy },
+                    { "portfolio", portfolio },
+                    { "broker", broker },
+                    { "customer", customer },
+                    { "orderBy", orderBy }
                 };
 
-                // Build the query string from the parameters
-                var queryString = BuildQueryString(parameters);
+                var content = new StringContent(
+                    JsonConvert.SerializeObject(requestBody),
+                    Encoding.UTF8,
+                    "application/json"); 
 
-                var url = $"{baseApiURL}{queryString}";
+                var url = $"{baseApiURL}";
 
-                HttpResponseMessage result = await _http.GetAsync(url);
+                HttpResponseMessage result = await _http.PostAsync(url, content);
+
                 var errorMessage = "";
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
@@ -80,7 +83,7 @@ namespace OSR_APP.Services.Implementation
                 {
                     queryStringBuilder.Append('&');
                 }
-                
+
                 if (kvp.Value is DateTime dateTime)
                 {
                     queryStringBuilder.Append($"{kvp.Key}={dateTime.ToString("yyyy-MM-ddTHH:mm:ssZ")}");

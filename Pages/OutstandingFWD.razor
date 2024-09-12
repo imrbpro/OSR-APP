@@ -1,4 +1,4 @@
-﻿@page "/outstandingfwd"
+﻿@page "/outstandingfwd/{dealNo?}/{dealNoTo?}/{contractDate?}/{contractDateTo?}/{valueDate?}/{valueDateTo?}/{entryDate?}/{entryDateTo?}/{ccy?}/{portfolio?}/{branchCode?}/{trader?}/{customer?}/{orderBy:int?}"
 @using MudBlazor
 @using OSR_APP.Services.Interface
 @using Newtonsoft.Json;
@@ -96,6 +96,22 @@
     </div>
 </div>
 @code {
+
+    [Parameter] public string? DealNo { get; set; } = "";
+    [Parameter] public string? DealNoTo { get; set; } = "";
+    [Parameter] public string? ContractDate { get; set; } = "";
+    [Parameter] public string? ContractDateTo { get; set; } = "";
+    [Parameter] public string? ValueDate { get; set; } = "";
+    [Parameter] public string? ValueDateTo { get; set; } = "";
+    [Parameter] public string? EntryDate { get; set; } = "";
+    [Parameter] public string? EntryDateTo { get; set; } = "";
+    [Parameter] public string? Ccy { get; set; } = "";
+    [Parameter] public string? PortFolio { get; set; } = "";
+    [Parameter] public string? BranchCode { get; set; } = "";
+    [Parameter] public string? Trader { get; set; } = "";
+    [Parameter] public string? Customer { get; set; } = "";
+    [Parameter] public int? OrderBy { get; set; } = 0;
+
     private IEnumerable<OSR_APP.Models.OutstandingFWD> outstandingFWDs;
     Dictionary<string, string> dictionary = new Dictionary<string, string>();
     private string searchString = "";
@@ -103,7 +119,22 @@
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
-        var response = await outstandingFWDService.GetOutstandingFWDData();
+        var response = await outstandingFWDService.GetOutstandingFWDData(
+            DealNo,
+            DealNoTo,
+            ContractDate,
+            ContractDateTo,
+            ValueDate,
+            ValueDateTo,
+            EntryDate,
+            EntryDateTo,
+            Ccy,
+            PortFolio,
+            BranchCode,
+            Trader,
+            Customer,
+            OrderBy
+        );
         outstandingFWDs = response["outstandingfwdData"];
         IsLoading = false;
     }

@@ -1,4 +1,4 @@
-﻿@page "/discounting"
+﻿@page "/discounting/{dealNo?}/{dealNoTo?}/{dealDate:datetime?}/{dealDateTo:datetime?}/{valueDate:datetime?}/{valueDateTo:datetime?}/{brCode?}/{ccy?}/{portFolio?}/{broker?}/{trader?}/{customer?}/{ps?}/{orderBy:int?}"
 @using MudBlazor
 @using OSR_APP.Services.Interface
 @using Newtonsoft.Json;
@@ -150,6 +150,21 @@
     </div>
 </div>
 @code {
+    [Parameter] public string? dealNo { get; set; } 
+    [Parameter] public string? dealNoTo { get; set; }
+    [Parameter] public string? dealDate { get; set; }
+    [Parameter] public string? dealDateTo { get; set; }
+    [Parameter] public string? valueDate { get; set; }
+    [Parameter] public string? valueDateTo { get; set; }
+    [Parameter] public string? brCode { get; set; }
+    [Parameter] public string? ccy { get; set; }
+    [Parameter] public string? portFolio { get; set; }
+    [Parameter] public string? broker { get; set; }
+    [Parameter] public string? trader { get; set; }
+    [Parameter] public string? customer{ get; set; }
+    [Parameter] public string? ps { get; set; }
+    [Parameter] public int? orderBy { get; set; } = 0;
+
     private IEnumerable<OSR_APP.Models.Discounting> discountingData;
     Dictionary<string, string> dictionary = new Dictionary<string, string>();
     private string searchString = "";
@@ -158,7 +173,22 @@
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
-        var response = await discountingService.GetDiscountingData();
+        var response = await discountingService.GetDiscountingData(
+            dealNo,
+            dealNoTo,
+            dealDate,
+            dealDateTo,
+            valueDate,
+            valueDateTo,
+            brCode,
+            ccy,
+            portFolio,
+            broker,
+            trader,
+            customer,
+            ps,
+            orderBy
+        );
         discountingData = response["discountingData"];
         IsLoading = false;
     }

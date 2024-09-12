@@ -2,6 +2,7 @@
 using OSR_APP.Models;
 using OSR_APP.Services.Interface;
 using System.Net;
+using System.Text;
 
 namespace OSR_APP.Services.Implementation
 {
@@ -19,12 +20,36 @@ namespace OSR_APP.Services.Implementation
             //request.Headers.Add("Authorization", ""); 
             request.Headers.Add("Content-Type", "application/json");
         }
-        public async Task<Dictionary<string, IEnumerable<OutstandingFWD>>> GetOutstandingFWDData()
+        public async Task<Dictionary<string, IEnumerable<OutstandingFWD>>> GetOutstandingFWDData(string? DealNo = "", string? DealNoTo = "", string? ContractDate = "", string? ContractDateTo = "", string? ValueDate = "", string? ValueDateTo = "", string? EntryDate = "", string? EntryDateTo = "", string? Ccy = "", string? PortFolio = "", string? BranchCode = "", string? Trader = "", string? Customer = "", int? OrderBy = 0)
         {
             var dictionary = new Dictionary<string, IEnumerable<OutstandingFWD>>();
             try
             {
-                HttpResponseMessage result = await _http.GetAsync(baseApiURL);
+                var requestBody = new Dictionary<string, object>()
+                {
+                    { "DealNo", DealNo },
+                    { "DealNoTo", DealNoTo },
+                    { "ContractDate", ContractDate },
+                    { "ContractDateTo", ContractDateTo },
+                    { "ValueDate", ValueDate },
+                    { "ValueDateTo", ValueDateTo },
+                    { "EntryDate", EntryDate },
+                    { "EntryDateTo", EntryDateTo },
+                    { "Ccy", Ccy },
+                    { "PortFolio", PortFolio },
+                    { "BranchCode", BranchCode },
+                    { "Trader", Trader },
+                    { "Customer", Customer },
+                    { "OrderBy", OrderBy }
+                };
+                var content = new StringContent(
+                   JsonConvert.SerializeObject(requestBody),
+                   Encoding.UTF8,
+                   "application/json");
+
+                var url = $"{baseApiURL}";
+
+                HttpResponseMessage result = await _http.PostAsync(url, content);
                 var errorMessage = "";
                 if (result.StatusCode == HttpStatusCode.OK)
                 {

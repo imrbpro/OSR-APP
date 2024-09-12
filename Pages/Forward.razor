@@ -1,4 +1,4 @@
-﻿@page "/Forward"
+﻿@page "/forward/{DealNo?}/{DealNoTo?}/{DealDate?}/{DealDateTo?}/{ODate?}/{ODateTo?}/{ValueDate?}/{ValueDateTo?}/{Ccy?}/{PortFolio?}/{Broker?}/{Trader?}/{Customer?}/{OrderBy:int?}"
 @using MudBlazor
 @using OSR_APP.Services.Interface
 @using Newtonsoft.Json;
@@ -148,6 +148,21 @@
     </div>
 </div>
 @code {
+    [Parameter] public string? DealNo { get; set; } = "";
+    [Parameter] public string? DealNoTo { get; set; } = "";
+    [Parameter] public string? DealDate { get; set; } = "";
+    [Parameter] public string? DealDateTo { get; set; } = "";
+    [Parameter] public string? ODate { get; set; } = "";
+    [Parameter] public string? ODateTo { get; set; } = "";
+    [Parameter] public string? ValueDate { get; set; } = "";
+    [Parameter] public string? ValueDateTo { get; set; } = "";
+    [Parameter] public string? Ccy { get; set; } = "";
+    [Parameter] public string? PortFolio { get; set; } = "";
+    [Parameter] public string? Broker { get; set; } = "";
+    [Parameter] public string? Trader { get; set; } = "";
+    [Parameter] public string? Customer { get; set; } = "";
+    [Parameter] public int? OrderBy { get; set; } = 0;
+
     private IEnumerable<OSR_APP.Models.Forward> forwardData;
     Dictionary<string, string> dictionary = new Dictionary<string, string>();
     private string searchString = "";
@@ -155,7 +170,22 @@
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
-        var response = await forwardService.GetForwardData();
+        var response = await forwardService.GetForwardData(
+            DealNo,
+            DealNoTo,
+            DealDate,
+            DealDateTo,
+            ODate,
+            ODateTo,
+            ValueDate,
+            ValueDateTo,
+            Ccy,
+            PortFolio,
+            Broker,
+            Trader,
+            Customer,
+            OrderBy
+        );
         forwardData = response["forwardData"];
         IsLoading = false;
     }

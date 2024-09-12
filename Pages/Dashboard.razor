@@ -98,50 +98,21 @@
         <div class="row">
             <div class="col-md-6">
                 <MudSelect class="form-control" T="string" Placeholder="Branch Code">
-                    @if (branchCodeData != null)
-                    {
-                        foreach (var brcode in branchCodeData)
+                        
+                        @foreach (var brcode in branchCodeData)
                         {
-                            <MudSelectItem T="string" Value="@brcode">@brcode</MudSelectItem>
+                            <MudSelectItem Value="@brcode">@brcode</MudSelectItem>
                         }
-                    }
+                    
                 </MudSelect>
             </div>
             <div class="col-md-6">
                 <MudSelect class="form-control" T="string" Placeholder="Currency">
-                    @if (currencyData != null)
-                    {
-                        foreach (var currency in currencyData)
+                   
+                        @foreach (var currency in currencyData)
                         {
-                            <MudSelectItem T="string" Value="@currency">@currency</MudSelectItem>
+                            <MudSelectItem Value="@currency">@currency</MudSelectItem>
                         }
-                    }
-                </MudSelect>
-            </div>
-        </div>
-
-        <br />
-        <div class="row">
-            <div class="col-md-6">
-                <MudSelect class="form-control" T="string" Placeholder="Portfolio">
-                    @if (portfolioData != null)
-                    {
-                        foreach (var portfolio in portfolioData)
-                        {
-                            <MudSelectItem T="string" Value="@portfolio">@portfolio</MudSelectItem>
-                        }
-                    }
-                </MudSelect>
-            </div>
-            <div class="col-md-6">
-                <MudSelect class="form-control" T="string" Placeholder="Trader">
-                    @if(traderData != null)
-                    {
-                        foreach (var trader in traderData)
-                        {
-                            <MudSelectItem T="string" Value="@trader">@trader</MudSelectItem>
-                        }
-                    }
                     
                 </MudSelect>
             </div>
@@ -150,14 +121,38 @@
         <br />
         <div class="row">
             <div class="col-md-6">
+                <MudSelect class="form-control" T="string" Placeholder="Portfolio">
+                    
+                        @foreach (var portfolio in portfolioData)
+                        {
+                            <MudSelectItem Value="@portfolio">@portfolio</MudSelectItem>
+                        }
+                    
+                </MudSelect>
+            </div>
+            <div class="col-md-6">
+                <MudSelect class="form-control" T="string" Placeholder="Trader">
+                    
+                        @foreach (var trader in traderData)
+                        {
+                            <MudSelectItem Value="@trader">@trader</MudSelectItem>
+                        }
+                   
+                </MudSelect>
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-md-6">
                 <select class="form-control" @bind="customer">
-                    <option value="">Select Customer</option>
+                    <option value="0">Select Customer</option>
                 </select>
             </div>
             <div class="col-md-6">
                 <select class="form-control" @bind="ps">
-                    <option value="">Purchase</option>
-                    <option value="">Sale</option>
+                    <option value=0>Purchase</option>
+                    <option value=1>Sale</option>
                 </select>
             </div>
         </div>
@@ -186,63 +181,90 @@
     private string value { get; set; } = "Select Option";
     private NavigationPages SelectedValue;
 
-    string dealNumber { get; set; }
-    string dealNumberTo { get; set; }
-    string groupBy { get; set; }
+    string? dealNumber { get; set; } = "0";
+    string? dealNumberTo { get; set; } = "0";
+    string? groupBy { get; set; } = "0";
 
-    string entryDateFrom { get; set; }
-    string entryDateTo { get; set; }
-    string contactDateFrom { get; set; }
-    string contactDateTo { get; set; }
-    string valueDateFrom { get; set; }
-    string valueDateTo { get; set; }
-    bool branchCode, currency, portfolio, trader, customer,  ps;
+    DateTime entryDateFrom { get; set; } = DateTime.Now;
+    DateTime entryDateTo { get; set; } = DateTime.Now;
+    DateTime contactDateFrom { get; set; } = DateTime.Now;
+    DateTime contactDateTo { get; set; } = DateTime.Now;
+    DateTime valueDateFrom { get; set; } = DateTime.Now;
+    DateTime valueDateTo { get; set; } = DateTime.Now;
+
+    bool branchCode { get; set; } = false;
+    bool currency { get; set; } = false;
+    bool portfolio { get; set; } = false;
+    bool trader { get; set; } = false;
+    string customer { get; set; } = "0";
+    int? ps { get; set; } = 0;
+
     private bool IsLoading = false;
-    private IEnumerable<string> branchCodeData, currencyData, portfolioData, traderData;
+
+    List<string> branchCodeData = new List<string>();
+    List<string> currencyData = new List<string>(); 
+    List<string> portfolioData = new List<string>();
+    List<string> traderData = new List<string>();
 
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
 
-        var branchCode = await filterService.GetBranchCode();
-        var currency = await filterService.GetCurrency();
-        var portfolio = await filterService.GetPortfolio();
-        var trader = await filterService.GetTrader();
-
-        branchCodeData = branchCode["branchCodeData"];
-        currencyData = currency["currencyData"];
-        portfolioData = portfolio["portfolioData"];
-        traderData = trader["traderData"];
-
-        IsLoading = false;
+        try
+        {
+            await LoadDataAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading data: {ex.Message}");
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
+
+    private async Task LoadDataAsync()
+    {
+        var branchCodeTask = filterService.GetBranchCode();
+        var currencyTask = filterService.GetCurrency();
+        var portfolioTask = filterService.GetPortfolio();
+        var traderTask = filterService.GetTrader();
+
+        await Task.WhenAll(branchCodeTask, currencyTask, portfolioTask, traderTask);
+
+        branchCodeData = (await branchCodeTask)?.GetValueOrDefault("branchCodeData").ToList<string>();
+        currencyData = (await currencyTask)?.GetValueOrDefault("currencyData").ToList<string>();
+        portfolioData = (await portfolioTask)?.GetValueOrDefault("portfolioData").ToList<string>();
+        traderData = (await traderTask)?.GetValueOrDefault("traderData").ToList<string>();
+    }
+
     private void GenerateReport()
     {
         if (SelectedValue != null)
         {
-            switch (SelectedValue.Name.ToString())
+            switch (SelectedValue.Name.ToString().ToLower())
             {
                 case "ready":
-                    navigation.NavigateTo("/" + SelectedValue.Name);
+                    navigation.NavigateTo(navigation.ToAbsoluteUri($"/ready/{dealNumber}/{dealNumberTo}/{entryDateFrom:yyyy-MM-dd}/{entryDateTo:yyyy-MM-dd}/{valueDateFrom:yyyy-MM-dd}/{valueDateTo:yyyy-MM-dd}/{branchCode}/{currency}/{portfolio}/{trader}/{customer}/{ps}/{ps}").ToString());
                     break;
                 case "discounting":
-                    navigation.NavigateTo("/" + SelectedValue.Name);
+                    navigation.NavigateTo(navigation.ToAbsoluteUri($"/discounting/{dealNumber}/{dealNumberTo}/{entryDateFrom:yyyy-MM-dd}/{entryDateTo:yyyy-MM-dd}/{valueDateFrom:yyyy-MM-dd}/{valueDateTo:yyyy-MM-dd}/{branchCode}/{currency}/{portfolio}/{trader}/{trader}/{customer}/{ps}/{ps}").ToString());
                     break;
                 case "forward":
-                    navigation.NavigateTo("/" + SelectedValue.Name);
+                    navigation.NavigateTo(navigation.ToAbsoluteUri($"/forward/{dealNumber}/{dealNumberTo}/{entryDateFrom:yyyy-MM-dd}/{entryDateTo:yyyy-MM-dd}/{contactDateFrom:yyyy-MM-dd}/{contactDateTo:yyyy-MM-dd}/{valueDateFrom:yyyy-MM-dd}/{valueDateTo:yyyy-MM-dd}/{currency}/{portfolio}/{trader}/{trader}/{customer}/{ps}").ToString());
                     break;
                 case "setoff":
-                    navigation.NavigateTo("/" + SelectedValue.Name);
+                    navigation.NavigateTo(navigation.ToAbsoluteUri($"/setoff/{dealNumber}/{dealNumberTo}/{contactDateFrom:yyyy-MM-dd}/{contactDateTo:yyyy-MM-dd}/{valueDateFrom:yyyy-MM-dd}/{valueDateTo:yyyy-MM-dd}/{entryDateFrom:yyyy-MM-dd}/{entryDateTo:yyyy-MM-dd}/{currency}/{portfolio}/{trader}/{customer}/{ps}").ToString());
                     break;
                 case "closeout":
-                    navigation.NavigateTo("/" + SelectedValue.Name + "?DealNo=" + dealNumber + "&DealNoTo=" + dealNumberTo + "&ContractDate=" + contactDateFrom + "&ContractDateTo=" + contactDateTo + "&ValueDate=" + valueDateFrom + "&ValueDateTo=" + valueDateTo + "&EntryDate=" + entryDateFrom + "&EntryDateTo=" + entryDateTo + "&Ccy=" + currency + "&Portfolio=" + portfolio + "&Broker=" + trader + "&Customer=" + customer + "&OrderBy=" + ps);
+                    navigation.NavigateTo(navigation.ToAbsoluteUri($"/closeout/{dealNumber}/{dealNumberTo}/{contactDateFrom:yyyy-MM-dd}/{contactDateTo:yyyy-MM-dd}/{valueDateFrom:yyyy-MM-dd}/{valueDateTo:yyyy-MM-dd}/{entryDateFrom:yyyy-MM-dd}/{entryDateTo:yyyy-MM-dd}/{currency}/{portfolio}/{trader}/{customer}/{ps}").ToString());
                     break;
                 case "outstandingfwd":
-                    navigation.NavigateTo("/" + SelectedValue.Name);
+                    navigation.NavigateTo(navigation.ToAbsoluteUri($"/outstandingfwd/{dealNumber}/{dealNumberTo}/{contactDateFrom:yyyy-MM-dd}/{contactDateTo:yyyy-MM-dd}/{valueDateFrom:yyyy-MM-dd}/{valueDateTo:yyyy-MM-dd}/{entryDateFrom:yyyy-MM-dd}/{entryDateTo:yyyy-MM-dd}/{currency}/{portfolio}/{branchCode}/{trader}/{customer}/{ps}").ToString());
                     break;
 
             }
-            navigation.NavigateTo("/" + SelectedValue.Name);
         }
         else
         {

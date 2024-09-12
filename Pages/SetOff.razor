@@ -1,4 +1,4 @@
-﻿@page "/Setoff"
+﻿@page "/setoff/{dealNo?}/{dealNoTo?}/{contractDate?}/{contractDateTo?}/{valueDate?}/{valueDateTo?}/{entryDate?}/{entryDateTo?}/{ccy?}/{portfolio?}/{trad?}/{customer?}/{orderBy:int?}"
 @using MudBlazor
 @using OSR_APP.Services.Interface
 @using Newtonsoft.Json;
@@ -116,6 +116,21 @@
     </div>
 </div>
 @code {
+
+    [Parameter] public string? DealNo { get; set; } = "";
+    [Parameter] public string? DealNoTo { get; set; } = "";
+    [Parameter] public string? ContractDate { get; set; } = "";
+    [Parameter] public string? ContractDateTo { get; set; } = "";
+    [Parameter] public string? ValueDate { get; set; } = "";
+    [Parameter] public string? ValueDateTo { get; set; } = "";
+    [Parameter] public string? EntryDate { get; set; } = "";
+    [Parameter] public string? EntryDateTo { get; set; } = "";
+    [Parameter] public string? Ccy { get; set; } = "";
+    [Parameter] public string? Portfolio { get; set; } = "";
+    [Parameter] public string? Trad { get; set; } = "";
+    [Parameter] public string? Customer { get; set; } = "";
+    [Parameter] public int? OrderBy { get; set; } = 0;
+
     private IEnumerable<OSR_APP.Models.SetOfffw> setoffData;
     Dictionary<string, string> dictionary = new Dictionary<string, string>();
     private string searchString = "";
@@ -123,7 +138,21 @@
     protected override async Task OnInitializedAsync()
     {
         IsLoading = true;
-        var response = await setoffService.GetSetOffData();
+        var response = await setoffService.GetSetOffData(
+            DealNo,
+            DealNoTo,
+            ContractDate,
+            ContractDateTo,
+            ValueDate,
+            ValueDateTo,
+            EntryDate,
+            EntryDateTo,
+            Ccy,
+            Portfolio,
+            Trad,
+            Customer,
+            OrderBy
+        );
         setoffData = response["setoffData"];
         IsLoading = false;
     }

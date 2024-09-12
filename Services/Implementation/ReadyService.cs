@@ -5,6 +5,7 @@ using OSR_APP.Models;
 using OSR_APP.Services.Interface;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using static MudBlazor.CategoryTypes;
 
 namespace OSR_APP.Services.Implementation
@@ -22,11 +23,36 @@ namespace OSR_APP.Services.Implementation
             _navigationManager = navigationManager;
             baseApiURL = $"{configuration["BackendApi"]}Ready";
         }
-        public async Task<Dictionary<string, IEnumerable<Ready>>> GetReadyData()
+        public async Task<Dictionary<string, IEnumerable<Ready>>> GetReadyData(string? DealNo = "", string? DealNoTo = "", string? DealDate = "", string? DealDateTo = "", string? ValueDate = "", string? ValueDateTo = "", string? BrCode = "", string? Ccy = "", string? PortFolio = "", string? Trader = "", string? Customer = "", string? Ps = "", int? OrderBy = 0)
         {
             var dictionary = new Dictionary<string, IEnumerable<Ready>> ();
             try
             {
+                var requestBody = new Dictionary<string, object>()
+                {
+                    { "DealNo", DealNo },
+                    { "DealNoTo", DealNoTo },
+                    { "DealDate", DealDate },
+                    { "DealDateTo", DealDateTo },
+                    { "ValueDate", ValueDate },
+                    { "ValueDateTo", ValueDateTo },
+                    { "BrCode", BrCode },
+                    { "Ccy", Ccy },
+                    { "PortFolio", PortFolio },
+                    { "Trader", Trader },
+                    { "Customer", Customer },
+                    { "Ps", Ps },
+                    { "OrderBy", OrderBy }
+                };
+
+                var content = new StringContent(
+                   JsonConvert.SerializeObject(requestBody),
+                   Encoding.UTF8,
+                   "application/json");
+
+                var url = $"{baseApiURL}";
+
+                HttpResponseMessage result = await _http.PostAsync(url, content);
                 HttpResponseMessage result = await _http.GetAsync(baseApiURL);
                 var errorMessage = "";
                 if (result.StatusCode == HttpStatusCode.OK)
